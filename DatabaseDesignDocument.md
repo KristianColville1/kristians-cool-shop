@@ -54,6 +54,7 @@
 | 02-10-2025 | 0.2.3   | Kristian Colville | Started working on the relationships and formatting for table.                                                  |
 | 02-10-2025 | 0.2.4   | Kristian Colville | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again. |
 | 02-10-2025 | 0.2.5   | Kristian Colville | Converted document to markdown file with libre office and set up github repo for project. I hate word.          |
+| 02-10-2025 | 0.3     | Kristian Colville | Started working on drafting section 3 and figuring out what to do next.                                         |
 
 ## 1. Purpose
 
@@ -157,16 +158,16 @@ From these roles, the following user requirements were identified:
 
 This section lists the primary entities that make up the database design. Each entity represents a real-world object or concept in the system, such as customers, products, or orders. Their attributes, including primary and foreign keys, will later be used to construct the ER diagram and logical schema. The table below provides a concise description of these entities and their roles within the system.
 
-| Entity                  | Role                                                               | Key Attributes                                                                                                                                                                                                                                                    |
-| ----------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Customer**      | People who browse, buy and contact support.                        | CustomerID (PK)<br />Email (unique)<br />FullName<br />Phone<br />Address (composite: Street, City, Postcode, Country)<br />CreatedAt<br />Status                                                                                                                 |
-| **Product**       | Items for sale.                                                    | ProductID (PK)<br />SKU (unique)<br />Name<br />Description<br />UnitPrice<br />StockQty<br />Status                                                                                                                                 |
-| **Category**      | Organises products, supports nested categories.                    | CategoryID (PK)<br />Name<br />ParentCategoryID (recursive, nullable)                                                                                                                                                                               |
-| **Order**         | A customer purchase event                                          | OrderID (PK)<br />OrderDate<br />Status<br />TotalAmount<br />CustomerID (FK)                                                                                                                                                           |
+| Entity                  | Role                                                               | Key Attributes                                                                                                                                                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Customer**      | People who browse, buy and contact support.                        | CustomerID (PK)<br />Email (unique)<br />FullName<br />Phone<br />Address (composite: Street, City, Postcode, Country)<br />CreatedAt<br />Status                                                                                                    |
+| **Product**       | Items for sale.                                                    | ProductID (PK)<br />SKU (unique)<br />Name<br />Description<br />UnitPrice<br />StockQty<br />Status                                                                                                                                                 |
+| **Category**      | Organises products, supports nested categories.                    | CategoryID (PK)<br />Name<br />ParentCategoryID (recursive, nullable)                                                                                                                                                                                |
+| **Order**         | A customer purchase event                                          | OrderID (PK)<br />OrderDate<br />Status<br />TotalAmount<br />CustomerID (FK)                                                                                                                                                                        |
 | **OrderItem**     | Links an Order to the Products purchased, with line-level details. | OrderID (FK, part of PK)<br />LineNo (part of PK)<br />ProductID (FK)<br /><br />Descriptive attributes: Quantity, UnitPriceAtOrder, LineSubtotal.<br /><br />Why weak? It has no meaning without its owning Order; identified by (OrderID, LineNo). |
-| **Payment**       | Records how an order was paid.                                     | PaymentID (PK)<br />OrderID (FK)<br />Amount<br />PaidAt<br />Status<br />MethodType                                                                                                                                               |
-| **SupportTicket** | Customer issues linked to orders/products.                         | TicketID (PK)<br />OpenedAt<br />Status<br />Priority<br />CustomerID (FK)<br />OrderID (FK, nullable)<br />AssignedTo (FK → Employee, nullable)<br />Subject                                                           |
-| **Employee**      | Admin/support staff                                                | EmployeeID (PK)<br />FullName<br />Email (unique)<br />Role<br />ManagerID (recursive, nullable).                                                                                                                                        |
+| **Payment**       | Records how an order was paid.                                     | PaymentID (PK)<br />OrderID (FK)<br />Amount<br />PaidAt<br />Status<br />MethodType                                                                                                                                                                 |
+| **SupportTicket** | Customer issues linked to orders/products.                         | TicketID (PK)<br />OpenedAt<br />Status<br />Priority<br />CustomerID (FK)<br />OrderID (FK, nullable)<br />AssignedTo (FK → Employee, nullable)<br />Subject                                                                                       |
+| **Employee**      | Admin/support staff                                                | EmployeeID (PK)<br />FullName<br />Email (unique)<br />Role<br />ManagerID (recursive, nullable).                                                                                                                                                    |
 
 ### 2.4 Relationships Among Objects
 
@@ -184,11 +185,69 @@ This section lists the primary entities that make up the database design. Each e
 
 ### 2.5 Functional Requirements (Transactions, Operations, Queries)
 
+This section outlines the key functional requirements of Kristian's Cool Shop. These requirements describe the operations the database must support for different stakeholders, including customers, administrators, and support staff. They are expressed as typical transactions or queries that demonstrate how the database will be used in practice.
+
+| Requirement                      | Stakeholder       | Example Transaction / Query                                                                |
+| -------------------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
+| Place a new order                | Customer          | Insert a new record into Order, with related OrderItem rows referencing selected Products. |
+| View order history               | Customer          | `SELECT * FROM Order WHERE CustomerID = ? ORDER BY OrderDate DESC;`                      |
+| Update stock levels              | Administrator     | `UPDATE Product SET StockQty = StockQty - ? WHERE ProductID = ?;`                        |
+| Generate sales report            | Management        | `SELECT ProductID, SUM(Quantity) FROM OrderItem GROUP BY ProductID;`                     |
+| Manage product listings          | Administrator     | Insert, update, or delete rows in Product and assign them to a Category.                   |
+| Record a payment                 | Customer / System | Insert into Payment (with subtype row in CardPayment or PayPalPayment) linked to an Order. |
+| Track unresolved support tickets | Support Agent     | `SELECT * FROM SupportTicket WHERE Status = 'Open' AND AssignedTo IS NULL;`              |
+| Escalate a ticket                | Support Agent     | Update SupportTicket with new EmployeeID (manager assignment).                             |
+| Analyse staff workload           | Management        | Count how many SupportTickets are assigned to each Employee.                               |
+
 ### 2.6 Assumptions, Constraints, and Dependencies
+
+**Assumptions**
+
+* Customers are required to register before placing an order (guest checkouts are not considered).
+* Each order must contain at least one product.
+* Payments are assumed to succeed once recorded; payment gateway errors are handled outside the database.
+* Support tickets are always linked to a customer account, but linking them to a specific order is optional.
+
+**Constraints**
+
+* Primary keys must uniquely identify every entity (e.g., CustomerID, OrderID).
+* Foreign key constraints enforce valid relationships (e.g., every Order must reference a valid Customer).
+* Composite attributes, such as Customer Address, will be normalised into separate fields (Street, City, Postcode, Country) for clarity.
+* OrderItem is a weak entity and cannot exist without its parent Order.
+* Subtypes of Payment (CardPayment, PayPalPayment) enforce disjointness — a payment record must belong to exactly one subtype.
+
+**Dependencies**
+
+* The database design assumes integration with an external payment system.
+* Customer support processes depend on staff availability; the database only manages tickets and assignments, not communication channels.
+* Product categories may be hierarchical; the recursive relationship assumes front-end or business logic prevents circular dependencies.
+* Reporting and analytics queries depend on accurate and consistent transaction data being recorded in real time.
 
 ## 3. Conceptual Data Model
 
+The Conceptual Data Model represents the high-level view of Kristian's Cool Shop database, focusing on the essential entities, their attributes, and relationships without concern for implementation details. This section translates the business requirements from Section 2 into a formal data model that demonstrates the complexity and relationships needed to support the e-commerce platform's operations.
+
+The model incorporates several advanced database concepts to handle the real-world complexity of the system, including weak entities for order line items, recursive relationships for hierarchical categories and employee management, and subtype/supertype structures for different payment methods.
+
 ### 3.1 Rationale for Chosen Modelling Approach
+
+The Entity-Relationship (ER) modeling approach was selected for developing the conceptual data model of Kristian's Cool Shop. This choice was made after considering several alternative modeling approaches.
+
+**Why ER Modeling is Appropriate:**
+
+ER modeling excels at representing complex relationships between distinct business entities, making it ideal for this e-commerce system with multiple interconnected entities (customers, products, orders, payments). As noted by GeeksforGeeks, "ER diagrams represent the E-R model in a database, making them easy to convert into relations (tables)" (GeeksforGeeks, 2025), which aligns perfectly with our SQL-based implementation target.
+
+**Alternative Approaches Considered:**
+
+- **Object-Oriented Modeling**: Overkill for this relational database project and doesn't align with SQL implementation.
+- **UML Class Diagrams**: More suited for software design rather than database design, adding unnecessary complexity.
+- **Relational Model**: Starting directly with tables would skip the important conceptual phase.
+
+**Specific Benefits for This Project:**
+
+The ER approach directly addresses the scaling issues mentioned in the problem domain. By clearly modeling entities and relationships first, we can identify potential bottlenecks (like the many-to-many relationship between orders and products) and design appropriate solutions (the OrderItem weak entity) before implementation. This upfront modeling prevents the "clunky monolithic setup" problems that led to the current system's performance issues.
+
+The ER model also naturally supports the advanced concepts required by the assignment - weak entities for order line items, recursive relationships for category hierarchies and employee management structures, and subtype/supertype relationships for different payment methods.
 
 ### 3.2 Entity Definitions and Attributes
 
@@ -238,3 +297,18 @@ This section lists the primary entities that make up the database design. Each e
 - **A. Sample Queries and Transactions**
 - **B. Glossary of Technical Terms**
 - **C. Full ERD and Schema Diagrams (large-format versions)**
+
+## Credits
+
+### Educational Resources
+
+**GeeksforGeeks** - Database Management System tutorials and ER Model concepts
+
+- [Introduction of ER Model](https://www.geeksforgeeks.org/dbms/introduction-of-er-model/)
+- [Difference between UML and ER Diagram](https://www.geeksforgeeks.org/dbms/difference-between-uml-and-er-diagram/)
+
+**SETU Waterford** - Higher Diploma in Computer Science (Databases Module)
+
+- Learning materials and assignment guidance
+- Database design principles and methodologies
+- ER modeling concepts and best practices
