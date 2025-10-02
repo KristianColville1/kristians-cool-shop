@@ -53,7 +53,7 @@
 | 02-10-2025 | 0.2.2   | Kristian Colville | Created table for objects of interest and formatted.                                                            |
 | 02-10-2025 | 0.2.3   | Kristian Colville | Started working on the relationships and formatting for table.                                                  |
 | 02-10-2025 | 0.2.4   | Kristian Colville | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again. |
-| 02-10-2025 | 0.2.5   | Kristian Colville | Converted document to markdown file with libre office and set up github repo for project.                       |
+| 02-10-2025 | 0.2.5   | Kristian Colville | Converted document to markdown file with libre office and set up github repo for project. I hate word.          |
 
 ## 1. Purpose
 
@@ -157,30 +157,71 @@ From these roles, the following user requirements were identified:
 
 This section lists the primary entities that make up the database design. Each entity represents a real-world object or concept in the system, such as customers, products, or orders. Their attributes, including primary and foreign keys, will later be used to construct the ER diagram and logical schema. The table below provides a concise description of these entities and their roles within the system.
 
-| Entity                  | Role                                                               | Key Attributes                                                                                                                                                                                                                                                    |
-| ----------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Customer**      | People who browse, buy and contact support.                        | • CustomerID (PK)`<br>`• Email (unique)`<br>`• FullName`<br>`• Phone`<br>`• Address (composite: Street, City, Postcode, Country)`<br>`• CreatedAt`<br>`• Status                                                                                |
-| **Product**       | Items for sale.                                                    | • ProductID (PK)`<br>`• SKU (unique)`<br>`• Name`<br>`• Description`<br>`• UnitPrice`<br>`• StockQty`<br>`• Status                                                                                                                             |
-| **Category**      | Organises products, supports nested categories.                    | • CategoryID (PK)`<br>`• Name`<br>`• ParentCategoryID (recursive, nullable)                                                                                                                                                                                |
-| **Order**         | A customer purchase event                                          | • OrderID (PK)`<br>`• OrderDate`<br>`• Status`<br>`• TotalAmount`<br>`• CustomerID (FK)                                                                                                                                                              |
-| **OrderItem**     | Links an Order to the Products purchased, with line-level details. | • OrderID (FK, part of PK)`<br>`• LineNo (part of PK)`<br>`• ProductID (FK)`<br><br>`Descriptive attributes: Quantity, UnitPriceAtOrder, LineSubtotal.`<br><br>`Why weak? It has no meaning without its owning Order; identified by (OrderID, LineNo). |
-| **Payment**       | Records how an order was paid.                                     | • PaymentID (PK)`<br>`• OrderID (FK)`<br>`• Amount`<br>`• PaidAt`<br>`• Status`<br>`• MethodType                                                                                                                                                  |
-| **SupportTicket** | Customer issues linked to orders/products.                         | • TicketID (PK)`<br>`• OpenedAt`<br>`• Status`<br>`• Priority`<br>`• CustomerID (FK)`<br>`• OrderID (FK, nullable)`<br>`• AssignedTo (FK → Employee, nullable)`<br>`• Subject                                                              |
-| **Employee**      | Admin/support staff                                                | • EmployeeID (PK)`<br>`• FullName`<br>`• Email (unique)`<br>`• Role`<br>`• ManagerID (recursive, nullable).                                                                                                                                          |
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Role</th>
+<th>Key Attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Customer</strong></td>
+<td>People who browse, buy and contact support.</td>
+<td>• CustomerID (PK)<br>• Email (unique)<br>• FullName<br>• Phone<br>• Address (composite: Street, City, Postcode, Country)<br>• CreatedAt<br>• Status</td>
+</tr>
+<tr>
+<td><strong>Product</strong></td>
+<td>Items for sale.</td>
+<td>• ProductID (PK)<br>• SKU (unique)<br>• Name<br>• Description<br>• UnitPrice<br>• StockQty<br>• Status</td>
+</tr>
+<tr>
+<td><strong>Category</strong></td>
+<td>Organises products, supports nested categories.</td>
+<td>• CategoryID (PK)<br>• Name<br>• ParentCategoryID (recursive, nullable)</td>
+</tr>
+<tr>
+<td><strong>Order</strong></td>
+<td>A customer purchase event</td>
+<td>• OrderID (PK)<br>• OrderDate<br>• Status<br>• TotalAmount<br>• CustomerID (FK)</td>
+</tr>
+<tr>
+<td><strong>OrderItem</strong></td>
+<td>Links an Order to the Products purchased, with line-level details.</td>
+<td>• OrderID (FK, part of PK)<br>• LineNo (part of PK)<br>• ProductID (FK)<br><br>Descriptive attributes: Quantity, UnitPriceAtOrder, LineSubtotal.<br><br>Why weak? It has no meaning without its owning Order; identified by (OrderID, LineNo).</td>
+</tr>
+<tr>
+<td><strong>Payment</strong></td>
+<td>Records how an order was paid.</td>
+<td>• PaymentID (PK)<br>• OrderID (FK)<br>• Amount<br>• PaidAt<br>• Status<br>• MethodType</td>
+</tr>
+<tr>
+<td><strong>SupportTicket</strong></td>
+<td>Customer issues linked to orders/products.</td>
+<td>• TicketID (PK)<br>• OpenedAt<br>• Status<br>• Priority<br>• CustomerID (FK)<br>• OrderID (FK, nullable)<br>• AssignedTo (FK → Employee, nullable)<br>• Subject</td>
+</tr>
+<tr>
+<td><strong>Employee</strong></td>
+<td>Admin/support staff</td>
+<td>• EmployeeID (PK)<br>• FullName<br>• Email (unique)<br>• Role<br>• ManagerID (recursive, nullable).</td>
+</tr>
+</tbody>
+</table>
 
 ### 2.4 Relationships Among Objects
 
 | Relationship                                   | Cardinality               | Participation                                         | Attributes                 | Rationale                                                                   |
 | ---------------------------------------------- | ------------------------- | ----------------------------------------------------- | -------------------------- | --------------------------------------------------------------------------- |
-| Customer places Order                          | 1 → 0..*                 | Customer = partial, Order = total                     |                            | Every order must belong to a customer; not every customer places an order.  |
+| Customer places Order                          | 1 ⟶ 0..*                 | Customer = partial, Order = total                     |                            | Every order must belong to a customer; not every customer places an order.  |
 | Order contains Product (via OrderItem – weak) | M:N resolved by OrderItem | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder | OrderItem depends on Order; records product quantities at time of purchase. |
-| Product belongs to Category                    | Many → 0..1              | Product = partial, Category = partial                 |                            | Products may or may not be categorised; categories may be empty.            |
-| Category parent-of Category (recursive)        | 0..1 → 0..*              | Parent = partial, Child = partial                     |                            | Supports multi-level catalogue; prevents cycles.                            |
-| Order paid by Payment                          | 1 → 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt             | Orders can exist before payment; every payment must belong to an order.     |
-| SupportTicket opened by Customer               | 0..* → 1                 | Customer = partial, Ticket = total                    |                            | Every ticket must belong to a customer; some customers never open tickets.  |
-| SupportTicket refers to Order                  | 0..* → 0..1              | Both partial                                          |                            | A ticket may or may not be linked to an order.                              |
-| SupportTicket assigned to Employee             | 0..* → 0..1              | Both partial                                          | AssignedAt                 | Tickets may be unassigned; some employees may have none.                    |
-| Employee reports to Employee (recursive)       | 0..1 → 0..*              | Both partial                                          |                            | Models reporting lines; not all employees are managers.                     |
+| Product belongs to Category                    | Many ⟶ 0..1              | Product = partial, Category = partial                 |                            | Products may or may not be categorised; categories may be empty.            |
+| Category parent-of Category (recursive)        | 0..1 ⟶ 0..*              | Parent = partial, Child = partial                     |                            | Supports multi-level catalogue; prevents cycles.                            |
+| Order paid by Payment                          | 1 ⟶ 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt             | Orders can exist before payment; every payment must belong to an order.     |
+| SupportTicket opened by Customer               | 0..* ⟶ 1                 | Customer = partial, Ticket = total                    |                            | Every ticket must belong to a customer; some customers never open tickets.  |
+| SupportTicket refers to Order                  | 0..* ⟶ 0..1              | Both partial                                          |                            | A ticket may or may not be linked to an order.                              |
+| SupportTicket assigned to Employee             | 0..* ⟶ 0..1              | Both partial                                          | AssignedAt                 | Tickets may be unassigned; some employees may have none.                    |
+| Employee reports to Employee (recursive)       | 0..1 ⟶ 0..*              | Both partial                                          |                            | Models reporting lines; not all employees are managers.                     |
 
 ### 2.5 Functional Requirements (Transactions, Operations, Queries)
 
