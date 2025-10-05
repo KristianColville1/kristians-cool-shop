@@ -36,7 +36,7 @@
 - [4. Logical Data Model](#4-logical-data-model)
   - [4.1 Mapping Process from Conceptual to Logical](#41-mapping-process-from-conceptual-to-logical)
   - [4.2 Relational Schema (Tables, Primary Keys, Foreign Keys)](#42-relational-schema-tables-primary-keys-foreign-keys)
-  - [4.3 Normalization and Justification (1NF → 3NF or BCNF if applicable)](#43-normalization-and-justification-1nf--3nf-or-bcnf-if-applicable)
+  - [4.3 Normalisation and Justification (1NF → 3NF or BCNF if applicable)](#43-normalisation-and-justification-1nf--3nf-or-bcnf-if-applicable)
   - [4.4 Integrity Constraints (domain, entity, referential)](#44-integrity-constraints-domain-entity-referential)
   - [4.5 Logical ER Diagram / Relational Diagram](#45-logical-er-diagram--relational-diagram)
   - [4.6 Example SQL Definitions (CREATE TABLE statements with constraints)](#46-example-sql-definitions-create-table-statements-with-constraints)
@@ -49,28 +49,28 @@
 
 ## Revision History
 
-| Date       | Version | Author         | Change/Note                                                                                                              |
-| ---------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| 28-09-2025 | 0.1     | Document Owner | Initial draft, rough outline with table of contents. Prepping sections and overall information to be included.           |
-| 28-09-2025 | 0.1.1   | Document Owner | Defined purpose, edited and drafted section 1.                                                                           |
-| 01-10-2025 | 0.2     | Document Owner | Started Section 2, chose problem domain for assignment.                                                                  |
-| 01-10-2025 | 0.2.1   | Document Owner | Extracted database user requirements from the problem domain.                                                            |
-| 02-10-2025 | 0.2.2   | Document Owner | Created table for objects of interest and formatted.                                                                     |
-| 02-10-2025 | 0.2.3   | Document Owner | Started working on the relationships and formatting for table.                                                           |
-| 02-10-2025 | 0.2.4   | Document Owner | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again.          |
-| 02-10-2025 | 0.2.5   | Document Owner | Converted document to markdown file with libre office and set up github repo for project. I hate word.                   |
-| 02-10-2025 | 0.3     | Document Owner | Started working on drafting section 3 and figuring out what to do next.                                                  |
-| 05-10-2025 | 0.3.1   | Document Owner | Proofing document. Identified several formatting issues to fix.                                                          |
-| 05-10-2025 | 0.4     | Document Owner | Identified redundancy between sections 2 and 3 - detailed technical specs were repeated                                  |
-| 05-10-2025 | 0.4.1   | Document Owner | Moved detailed entity attributes and cardinalities from Section 2 to Section 4 (Logical Data Model)                      |
-| 05-10-2025 | 0.4.2   | Document Owner | Rewrote Section 2.3 and 2.4 to be business-focused and conceptual only                                                   |
-| 05-10-2025 | 0.4.3   | Document Owner | Updated Section 3.2 to provide proper conceptual entity definitions                                                      |
-| 05-10-2025 | 0.4.4   | Document Owner | Created Section 4 (Logical Data Model) with all detailed technical specifications                                        |
-| 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation |
-| 05-10-2025 | 0.4.6   | Document Owner | Added subtype/supertype pattern for products and edited sections 2 to 4                                                  |
-|            |         |                |                                                                                                                          |
-|            |         |                |                                                                                                                          |
-|            |         |                |                                                                                                                          |
+| Date       | Version | Author         | Change/Note                                                                                                               |
+| ---------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 28-09-2025 | 0.1     | Document Owner | Initial draft, rough outline with table of contents. Prepping sections and overall information to be included.            |
+| 28-09-2025 | 0.1.1   | Document Owner | Defined purpose, edited and drafted section 1.                                                                            |
+| 01-10-2025 | 0.2     | Document Owner | Started Section 2, chose problem domain for assignment.                                                                   |
+| 01-10-2025 | 0.2.1   | Document Owner | Extracted database user requirements from the problem domain.                                                             |
+| 02-10-2025 | 0.2.2   | Document Owner | Created table for objects of interest and formatted.                                                                      |
+| 02-10-2025 | 0.2.3   | Document Owner | Started working on the relationships and formatting for table.                                                            |
+| 02-10-2025 | 0.2.4   | Document Owner | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again.           |
+| 02-10-2025 | 0.2.5   | Document Owner | Converted document to markdown file with libre office and set up github repo for project. I hate word.                    |
+| 02-10-2025 | 0.3     | Document Owner | Started working on drafting section 3 and figuring out what to do next.                                                   |
+| 05-10-2025 | 0.3.1   | Document Owner | Proofing document. Identified several formatting issues to fix.                                                           |
+| 05-10-2025 | 0.4     | Document Owner | Identified redundancy between sections 2 and 3 - detailed technical specs were repeated.                                  |
+| 05-10-2025 | 0.4.1   | Document Owner | Moved detailed entity attributes and cardinalities from Section 2 to Section 4 (Logical Data Model).                      |
+| 05-10-2025 | 0.4.2   | Document Owner | Rewrote Section 2.3 and 2.4 to be business-focused and conceptual only.                                                   |
+| 05-10-2025 | 0.4.3   | Document Owner | Updated Section 3.2 to provide proper conceptual entity definitions.                                                      |
+| 05-10-2025 | 0.4.4   | Document Owner | Created Section 4 (Logical Data Model) with all detailed technical specifications.                                        |
+| 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation. |
+| 05-10-2025 | 0.4.6   | Document Owner | Added subtype/supertype pattern for products and edited sections 2 to 4.                                                  |
+| 05-10-2025 | 0.5     | Document Owner | Edited section 4 and added data from research and the problem domain for normalisation.                                   |
+|            |         |                |                                                                                                                           |
+|            |         |                |                                                                                                                           |
 
 ## 1. Purpose
 
@@ -201,9 +201,9 @@ This section identifies the primary business entities that the system must manag
 | **Customer**      | People who interact with the store                       | Individuals who browse, purchase, and seek support   |
 | **Product**       | Core product information shared across all product types | Common attributes for all merchandise in inventory   |
 | **Electronics**   | Electronic products with specialized attributes          | Brand, model, warranty specifications for tech items |
-| **Clothing**      | Apparel items with size and material attributes          | Size, color, material details for clothing items     |
+| **Clothing**      | Apparel items with size and material attributes          | Size, colour, material details for clothing items    |
 | **Books**         | Publications with author and publisher information       | Author, ISBN, publisher details for book items       |
-| **Category**      | Product organization system                              | Hierarchical structure for organizing products       |
+| **Category**      | Product organisation system                              | Hierarchical structure for organising products       |
 | **Order**         | Customer purchase transactions                           | Records of what customers have bought                |
 | **OrderItem**     | Individual products within orders                        | Line-level details of each product in a purchase     |
 | **Payment**       | Financial transactions                                   | Records of how orders were paid                      |
@@ -279,21 +279,21 @@ The model incorporates several advanced database concepts to handle the real-wor
 
 ### 3.1 Rationale for Chosen Modelling Approach
 
-The Entity-Relationship (ER) modeling approach was selected for developing the conceptual data model of Kristian's Cool Shop. This choice was made after considering several alternative modeling approaches.
+The Entity-Relationship (ER) modelling approach was selected for developing the conceptual data model of Kristian's Cool Shop. This choice was made after considering several alternative modelling approaches.
 
-**Why ER Modeling is Appropriate:**
+**Why ER Modelling is Appropriate:**
 
-ER modeling excels at representing complex relationships between distinct business entities, making it ideal for this e-commerce system with multiple interconnected entities (customers, products, orders, payments). As noted by GeeksforGeeks, "ER diagrams represent the E-R model in a database, making them easy to convert into relations (tables)" (GeeksforGeeks, 2025), which aligns perfectly with our SQL-based implementation target.
+ER modelling excels at representing complex relationships between distinct business entities, making it ideal for this e-commerce system with multiple interconnected entities (customers, products, orders, payments). As noted by GeeksforGeeks, "ER diagrams represent the E-R model in a database, making them easy to convert into relations (tables)" (GeeksforGeeks, 2025), which aligns perfectly with our SQL-based implementation target.
 
 **Alternative Approaches Considered:**
 
-- **Object-Oriented Modeling**: Overkill for this relational database project and doesn't align with SQL implementation.
+- **Object-Oriented Modelling**: Overkill for this relational database project and doesn't align with SQL implementation.
 - **UML Class Diagrams**: More suited for software design rather than database design, adding unnecessary complexity.
 - **Relational Model**: Starting directly with tables would skip the important conceptual phase.
 
 **Specific Benefits for This Project:**
 
-The ER approach directly addresses the scaling issues mentioned in the problem domain. By clearly modeling entities and relationships first, we can identify potential bottlenecks (like the many-to-many relationship between orders and products) and design appropriate solutions (the OrderItem weak entity) before implementation. This upfront modeling prevents the "clunky monolithic setup" problems that led to the current system's performance issues.
+The ER approach directly addresses the scaling issues mentioned in the problem domain. By clearly modelling entities and relationships first, we can identify potential bottlenecks (like the many-to-many relationship between orders and products) and design appropriate solutions (the OrderItem weak entity) before implementation. This upfront modelling prevents the "clunky monolithic setup" problems that led to the current system's performance issues.
 
 The ER model also naturally supports the advanced concepts required by the assignment - weak entities for order line items, recursive relationships for category hierarchies and employee management structures, and subtype/supertype relationships for different payment methods.
 
@@ -352,7 +352,7 @@ This section provides conceptual definitions of each entity in the data model, f
 
 **Key Business Characteristics**:
 
-- Contains size, color, material, and care instruction information
+- Contains size, colour, material, and care instruction information
 - Dependent on the Product supertype for core product information
 - Attributes are only applicable to products classified as clothing
 - Supports detailed product specifications for fashion items
@@ -466,45 +466,50 @@ This section defines the conceptual relationships between entities and their car
 - **M:N (Many-to-Many)**: Each instance of Entity A can relate to multiple instances of Entity B, and each instance of Entity B can relate to multiple instances of Entity A
 
 **Participation Constraints** indicate whether entity participation in relationships is mandatory (total) or optional (partial):
+
 - **Total Participation**: Every instance of the entity must participate in the relationship
 - **Partial Participation**: Some instances of the entity may not participate in the relationship
 
 These conceptual cardinalities will be implemented in the logical model through foreign key constraints, intermediate tables for M:N relationships, and referential integrity rules.
 
-| Relationship | Cardinality | Participation | Relationship Attributes | Business Rule |
-|--------------|-------------|---------------|------------------------|---------------|
-| Customer places Order | 1:M | Customer = partial, Order = total | | Every order must belong to a customer; customers may exist without orders |
-| Order contains Product | M:N | Both partial | Quantity, UnitPriceAtOrder | Resolved through OrderItem weak entity |
-| Product belongs to Category | M:1 | Product = partial, Category = partial | | Products may be uncategorized; categories may be empty |
-| Category has subcategories | 1:M | Both partial | | Hierarchical structure; prevents cycles |
-| Order has Payment | 1:M | Order = partial, Payment = total | Amount, PaidAt, Status | Orders can exist before payment; every payment belongs to an order |
-| Customer opens SupportTicket | 1:M | Customer = partial, Ticket = total | | Every ticket belongs to a customer; customers may never open tickets |
-| SupportTicket relates to Order | M:1 | Both partial | | Tickets may reference specific orders for context |
-| SupportTicket assigned to Employee | M:1 | Both partial | | Tickets may be unassigned; employees may have no tickets |
-| Employee reports to Employee | 1:M | Both partial | | Management hierarchy; not all employees are managers |
-| Product has specialized attributes | 1:1 | Product = total, Subtype = total | | Each product belongs to exactly one subtype |
+| Relationship                       | Cardinality | Participation                         | Relationship Attributes    | Business Rule                                                             |
+| ---------------------------------- | ----------- | ------------------------------------- | -------------------------- | ------------------------------------------------------------------------- |
+| Customer places Order              | 1:M         | Customer = partial, Order = total     |                            | Every order must belong to a customer; customers may exist without orders |
+| Order contains Product             | M:N         | Both partial                          | Quantity, UnitPriceAtOrder | Resolved through OrderItem weak entity                                    |
+| Product belongs to Category        | M:1         | Product = partial, Category = partial |                            | Products may be uncategorized; categories may be empty                    |
+| Category has subcategories         | 1:M         | Both partial                          |                            | Hierarchical structure; prevents cycles                                   |
+| Order has Payment                  | 1:M         | Order = partial, Payment = total      | Amount, PaidAt, Status     | Orders can exist before payment; every payment belongs to an order        |
+| Customer opens SupportTicket       | 1:M         | Customer = partial, Ticket = total    |                            | Every ticket belongs to a customer; customers may never open tickets      |
+| SupportTicket relates to Order     | M:1         | Both partial                          |                            | Tickets may reference specific orders for context                         |
+| SupportTicket assigned to Employee | M:1         | Both partial                          |                            | Tickets may be unassigned; employees may have no tickets                  |
+| Employee reports to Employee       | 1:M         | Both partial                          |                            | Management hierarchy; not all employees are managers                      |
+| Product has specialized attributes | 1:1         | Product = total, Subtype = total      |                            | Each product belongs to exactly one subtype                               |
 
 ### 3.4 Constraints and Business Rules (conceptual level)
 
 This section defines the conceptual constraints and business rules that govern the data model at the conceptual level. These constraints ensure data integrity and enforce business logic before implementation in the logical model.
 
-#### **Entity Constraints**
+**Entity Constraints**
+
 - **Uniqueness Constraints**: Each entity must have a unique identifier (CustomerID, ProductID, OrderID, etc.)
 - **Existence Constraints**: Certain entities cannot exist without their parent entities (OrderItem requires Order)
 - **Type Constraints**: Products must belong to exactly one subtype (Electronics, Clothing, or Books)
 
-#### **Relationship Constraints**
+**Relationship Constraints**
+
 - **Referential Integrity**: Every foreign key must reference a valid primary key
 - **Cardinality Constraints**: Relationships must respect their defined cardinalities
 - **Participation Constraints**: Total participation entities must always participate in their relationships
 - **Disjointness Constraints**: Subtype entities are mutually exclusive (a product cannot be both Electronics and Clothing)
 
-#### **Domain Constraints**
+**Domain Constraints**
+
 - **Value Constraints**: Status fields must use predefined values (Active, Inactive, Pending, etc.)
 - **Range Constraints**: Quantities must be positive, prices must be non-negative
 - **Format Constraints**: Email addresses must follow valid email format, phone numbers must be valid
 
-#### **Business Rules**
+**Business Rules**
+
 - **Registration Requirement**: Customers must register before placing orders (no guest checkout)
 - **Order Content**: Every order must contain at least one product
 - **Payment Association**: Every payment must be associated with an order
@@ -513,7 +518,8 @@ This section defines the conceptual constraints and business rules that govern t
 - **Hierarchical Integrity**: Category hierarchies cannot contain circular references
 - **Employee Management**: Employee reporting relationships cannot create cycles
 
-#### **Temporal Constraints**
+**Temporal Constraints**
+
 - **Order Lifecycle**: Orders progress through defined states (Pending → Processing → Shipped → Delivered)
 - **Payment Processing**: Payments can be processed after order creation
 - **Support Ticket Lifecycle**: Tickets progress through defined states (Open → In Progress → Resolved → Closed)
@@ -522,7 +528,7 @@ These conceptual constraints will be implemented in the logical model through pr
 
 ### 3.5 Advanced Data Modelling Features
 
-The conceptual data model incorporates several advanced database modeling concepts to handle the complexity of the e-commerce system:
+The conceptual data model incorporates several advanced database modelling concepts to handle the complexity of the e-commerce system:
 
 - **Multivalued Attributes**: Attributes that can have multiple values for a single entity instance
 - **Recursive Relationships**: Self-referencing relationships that model hierarchical structures (Category parent-child relationships, Employee management hierarchy)
@@ -608,7 +614,8 @@ This mapping process ensures that all business requirements captured in the conc
 
 This section provides the detailed technical specifications for each entity, including all attributes, data types, primary keys, foreign keys, and constraints. This represents the logical data model that will be implemented in the database system.
 
-#### **Customer Table**
+<details>
+<summary><strong>Customer Table</strong></summary>
 
 | Attribute  | Data Type                               | Constraints                         | Description                                 |
 | ---------- | --------------------------------------- | ----------------------------------- | ------------------------------------------- |
@@ -623,7 +630,10 @@ This section provides the detailed technical specifications for each entity, inc
 | CreatedAt  | TIMESTAMP                               | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Account creation timestamp                  |
 | Status     | ENUM('Active', 'Suspended', 'Inactive') | NOT NULL, DEFAULT 'Active'          | Account status                              |
 
-#### **Product Table**
+</details>
+
+<details>
+<summary><strong>Product Table</strong></summary>
 
 | Attribute   | Data Type                                      | Constraints                 | Description                        |
 | ----------- | ---------------------------------------------- | --------------------------- | ---------------------------------- |
@@ -636,7 +646,10 @@ This section provides the detailed technical specifications for each entity, inc
 | Status      | ENUM('Active', 'Discontinued', 'Out of Stock') | NOT NULL, DEFAULT 'Active'  | Product availability status        |
 | ProductType | ENUM('Electronics', 'Clothing', 'Books')       | NOT NULL                    | Discriminator for subtype tables   |
 
-#### **Electronics Table (Subtype)**
+</details>
+
+<details>
+<summary><strong>Electronics Table (Subtype)</strong></summary>
 
 | Attribute      | Data Type    | Constraints                                            | Description                 |
 | -------------- | ------------ | ------------------------------------------------------ | --------------------------- |
@@ -646,17 +659,23 @@ This section provides the detailed technical specifications for each entity, inc
 | WarrantyPeriod | INTEGER      | NULL                                                   | Warranty period in months   |
 | Specifications | TEXT         | NULL                                                   | Technical specifications    |
 
-#### **Clothing Table (Subtype)**
+</details>
+
+<details>
+<summary><strong>Clothing Table (Subtype)</strong></summary>
 
 | Attribute        | Data Type    | Constraints                                            | Description                       |
 | ---------------- | ------------ | ------------------------------------------------------ | --------------------------------- |
 | ProductID        | INTEGER      | PRIMARY KEY, FOREIGN KEY REFERENCES Product(ProductID) | Reference to parent product       |
 | Size             | VARCHAR(20)  | NOT NULL                                               | Clothing size (S, M, L, XL, etc.) |
-| Color            | VARCHAR(50)  | NOT NULL                                               | Primary color of the item         |
+| Color            | VARCHAR(50)  | NOT NULL                                               | Primary colour of the item        |
 | Material         | VARCHAR(100) | NULL                                                   | Fabric or material composition    |
 | CareInstructions | TEXT         | NULL                                                   | Washing and care instructions     |
 
-#### **Books Table (Subtype)**
+</details>
+
+<details>
+<summary><strong>Books Table (Subtype)</strong></summary>
 
 | Attribute | Data Type    | Constraints                                            | Description                        |
 | --------- | ------------ | ------------------------------------------------------ | ---------------------------------- |
@@ -666,7 +685,10 @@ This section provides the detailed technical specifications for each entity, inc
 | Pages     | INTEGER      | NULL                                                   | Number of pages                    |
 | Publisher | VARCHAR(255) | NULL                                                   | Publishing company                 |
 
-#### **Category Table**
+</details>
+
+<details>
+<summary><strong>Category Table</strong></summary>
 
 | Attribute        | Data Type    | Constraints                                       | Description                         |
 | ---------------- | ------------ | ------------------------------------------------- | ----------------------------------- |
@@ -674,7 +696,10 @@ This section provides the detailed technical specifications for each entity, inc
 | Name             | VARCHAR(255) | NOT NULL                                          | Category name                       |
 | ParentCategoryID | INTEGER      | NULL, FOREIGN KEY REFERENCES Category(CategoryID) | Reference to parent category        |
 
-#### **Order Table**
+</details>
+
+<details>
+<summary><strong>Order Table</strong></summary>
 
 | Attribute   | Data Type                                                          | Constraints                                           | Description                      |
 | ----------- | ------------------------------------------------------------------ | ----------------------------------------------------- | -------------------------------- |
@@ -684,7 +709,10 @@ This section provides the detailed technical specifications for each entity, inc
 | TotalAmount | DECIMAL(10,2)                                                      | NOT NULL                                              | Calculated total value           |
 | CustomerID  | INTEGER                                                            | NOT NULL, FOREIGN KEY REFERENCES Customer(CustomerID) | Reference to customer            |
 
-#### **OrderItem Table (Weak Entity)**
+</details>
+
+<details>
+<summary><strong>OrderItem Table (Weak Entity)</strong></summary>
 
 | Attribute        | Data Type     | Constraints                                         | Description                         |
 | ---------------- | ------------- | --------------------------------------------------- | ----------------------------------- |
@@ -695,7 +723,10 @@ This section provides the detailed technical specifications for each entity, inc
 | UnitPriceAtOrder | DECIMAL(10,2) | NOT NULL                                            | Price per unit at time of order     |
 | LineSubtotal     | DECIMAL(10,2) | NOT NULL                                            | Calculated line total               |
 
-#### **Payment Table**
+</details>
+
+<details>
+<summary><strong>Payment Table</strong></summary>
 
 | Attribute  | Data Type                                          | Constraints                                     | Description                        |
 | ---------- | -------------------------------------------------- | ----------------------------------------------- | ---------------------------------- |
@@ -706,7 +737,10 @@ This section provides the detailed technical specifications for each entity, inc
 | Status     | ENUM('Pending', 'Completed', 'Failed', 'Refunded') | NOT NULL, DEFAULT 'Pending'                     | Payment status                     |
 | MethodType | ENUM('Card', 'PayPal', 'Bank Transfer')            | NOT NULL                                        | Payment method category            |
 
-#### **SupportTicket Table**
+</details>
+
+<details>
+<summary><strong>SupportTicket Table</strong></summary>
 
 | Attribute  | Data Type                                         | Constraints                                           | Description                       |
 | ---------- | ------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
@@ -719,7 +753,10 @@ This section provides the detailed technical specifications for each entity, inc
 | AssignedTo | INTEGER                                           | NULL, FOREIGN KEY REFERENCES Employee(EmployeeID)     | Reference to assigned employee    |
 | Subject    | VARCHAR(255)                                      | NOT NULL                                              | Brief description of issue        |
 
-#### **Employee Table**
+</details>
+
+<details>
+<summary><strong>Employee Table</strong></summary>
 
 | Attribute  | Data Type                                         | Constraints                                       | Description                         |
 | ---------- | ------------------------------------------------- | ------------------------------------------------- | ----------------------------------- |
@@ -729,54 +766,215 @@ This section provides the detailed technical specifications for each entity, inc
 | Role       | ENUM('Administrator', 'Support Agent', 'Manager') | NOT NULL                                          | Job function                        |
 | ManagerID  | INTEGER                                           | NULL, FOREIGN KEY REFERENCES Employee(EmployeeID) | Reference to direct supervisor      |
 
-#### **Relationship Specifications with Cardinalities**
+</details>
 
-| Relationship                             | Cardinality               | Participation                                         | Attributes                               | Rationale                                                                  |
-| ---------------------------------------- | ------------------------- | ----------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------- |
-| Customer places Order                    | 1 ⟶ 0..*                 | Customer = partial, Order = total                     |                                          | Every order must belong to a customer; not every customer places an order  |
-| Order contains Product (via OrderItem)   | M:N resolved by OrderItem | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder, LineSubtotal | OrderItem depends on Order; records product quantities at time of purchase |
-| Product belongs to Category              | Many ⟶ 0..1              | Product = partial, Category = partial                 |                                          | Products may or may not be categorised; categories may be empty            |
-| Category parent-of Category (recursive)  | 0..1 ⟶ 0..*              | Parent = partial, Child = partial                     |                                          | Supports multi-level catalogue; prevents cycles                            |
-| Order paid by Payment                    | 1 ⟶ 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt, Status                   | Orders can exist before payment; every payment must belong to an order     |
-| SupportTicket opened by Customer         | 0..* ⟶ 1                 | Customer = partial, Ticket = total                    |                                          | Every ticket must belong to a customer; some customers never open tickets  |
-| SupportTicket refers to Order            | 0..* ⟶ 0..1              | Both partial                                          |                                          | A ticket may or may not be linked to an order                              |
-| SupportTicket assigned to Employee       | 0..* ⟶ 0..1              | Both partial                                          |                                          | Tickets may be unassigned; some employees may have none                    |
-| Employee reports to Employee (recursive) | 0..1 ⟶ 0..*              | Both partial                                          |                                          | Models reporting lines; not all employees are managers                     |
-| Product has Electronics attributes        | 1 ⟶ 0..1                 | Product = partial, Electronics = total                | Brand, Model, WarrantyPeriod, Specifications | Electronics subtype for electronic products only                           |
-| Product has Clothing attributes           | 1 ⟶ 0..1                 | Product = partial, Clothing = total                   | Size, Color, Material, CareInstructions     | Clothing subtype for apparel products only                                 |
-| Product has Books attributes              | 1 ⟶ 0..1                 | Product = partial, Books = total                      | Author, ISBN, Pages, Publisher              | Books subtype for publication products only                                |
+<details>
+<summary><strong>Relationship Specifications with Cardinalities</strong></summary>
 
-### 4.3 Normalization and Justification (1NF → 3NF or BCNF if applicable)
+| Relationship                             | Cardinality               | Participation                                         | Attributes                                   | Rationale                                                                  |
+| ---------------------------------------- | ------------------------- | ----------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------- |
+| Customer places Order                    | 1 ⟶ 0..*                 | Customer = partial, Order = total                     |                                              | Every order must belong to a customer; not every customer places an order  |
+| Order contains Product (via OrderItem)   | M:N resolved by OrderItem | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder, LineSubtotal     | OrderItem depends on Order; records product quantities at time of purchase |
+| Product belongs to Category              | Many ⟶ 0..1              | Product = partial, Category = partial                 |                                              | Products may or may not be categorised; categories may be empty            |
+| Category parent-of Category (recursive)  | 0..1 ⟶ 0..*              | Parent = partial, Child = partial                     |                                              | Supports multi-level catalogue; prevents cycles                            |
+| Order paid by Payment                    | 1 ⟶ 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt, Status                       | Orders can exist before payment; every payment must belong to an order     |
+| SupportTicket opened by Customer         | 0..* ⟶ 1                 | Customer = partial, Ticket = total                    |                                              | Every ticket must belong to a customer; some customers never open tickets  |
+| SupportTicket refers to Order            | 0..* ⟶ 0..1              | Both partial                                          |                                              | A ticket may or may not be linked to an order                              |
+| SupportTicket assigned to Employee       | 0..* ⟶ 0..1              | Both partial                                          |                                              | Tickets may be unassigned; some employees may have none                    |
+| Employee reports to Employee (recursive) | 0..1 ⟶ 0..*              | Both partial                                          |                                              | Models reporting lines; not all employees are managers                     |
+| Product has Electronics attributes       | 1 ⟶ 0..1                 | Product = partial, Electronics = total                | Brand, Model, WarrantyPeriod, Specifications | Electronics subtype for electronic products only                           |
+| Product has Clothing attributes          | 1 ⟶ 0..1                 | Product = partial, Clothing = total                   | Size, Colour, Material, CareInstructions     | Clothing subtype for apparel products only                                 |
+| Product has Books attributes             | 1 ⟶ 0..1                 | Product = partial, Books = total                      | Author, ISBN, Pages, Publisher               | Books subtype for publication products only                                |
+
+</details>
+
+### 4.3 Normalisation and Justification (1NF → 3NF or BCNF if applicable)
+
+This section analyses the normalisation level of the logical data model and justifies the design decisions made to ensure data integrity and eliminate redundancy. The database design follows normalisation principles through 3NF (Third Normal Form) and BCNF (Boyce-Codd Normal Form) where applicable.
+
+<details>
+<summary><strong>First Normal Form (1NF) Compliance</strong></summary>
+
+All tables in the logical model satisfy 1NF requirements:
+
+- **Atomic Values**: All attributes contain single, indivisible values
+- **No Repeating Groups**: No multivalued attributes or repeating groups exist
+- **Unique Rows**: Each row is uniquely identifiable through primary keys
+
+**Example**: The Customer table's address is decomposed into separate atomic attributes (Street, City, Postcode, Country) rather than storing a single composite address field.
+
+</details>
+
+<details>
+<summary><strong>Second Normal Form (2NF) Compliance</strong></summary>
+
+All tables satisfy 2NF by eliminating partial dependencies:
+
+- **Full Functional Dependencies**: All non-key attributes are fully functionally dependent on the entire primary key
+- **No Partial Dependencies**: No non-key attribute depends on only part of a composite primary key
+
+**Example**: In the OrderItem table, all attributes (Quantity, UnitPriceAtOrder, LineSubtotal) are fully dependent on the composite primary key (OrderID, LineNo), not just on OrderID or LineNo alone.
+
+</details>
+
+<details>
+<summary><strong>Third Normal Form (3NF) Compliance</strong></summary>
+
+All tables satisfy 3NF by eliminating transitive dependencies:
+
+- **No Transitive Dependencies**: No non-key attribute depends on another non-key attribute
+- **Direct Dependencies**: All non-key attributes depend directly on the primary key
+
+**Example**: In the Product table, attributes like Name, Description, UnitPrice, and StockQty depend directly on ProductID, not on each other.
+
+</details>
+
+<details>
+<summary><strong>Boyce-Codd Normal Form (BCNF) Compliance</strong></summary>
+
+The design achieves BCNF compliance, which is stricter than 3NF:
+
+- **Superkey Dependencies**: Every determinant is a superkey (candidate key)
+- **No Overlapping Candidate Keys**: All functional dependencies have superkeys as determinants
+
+**Key BCNF Compliance Examples**:
+
+- **Customer Table**: Email is a candidate key (unique), ensuring no non-superkey determinants
+- **Product Table**: SKU is a candidate key (unique), maintaining BCNF compliance
+- **Books Table**: ISBN is a candidate key (unique), preventing normalisation violations
+
+</details>
+
+<details>
+<summary><strong>Subtype/Supertype Normalisation Analysis</strong></summary>
+
+The subtype/supertype pattern maintains proper normalisation:
+
+**Product Supertype Table**:
+
+- Contains only common attributes shared across all product types
+- ProductType discriminator ensures proper subtype identification
+- No subtype-specific attributes violate normalisation
+
+**Subtype Tables (Electronics, Clothing, Books)**:
+
+- Each subtype table contains only attributes specific to that product type
+- Foreign key relationship to Product maintains referential integrity
+- No redundant storage of common product information
+
+</details>
+
+<details>
+<summary><strong>Design Decision: Subtype/Supertype vs. Meta Tables</strong></summary>
+
+**Initial Consideration**: Meta table approach (Entity-Attribute-Value pattern) was considered for flexible product attributes.
+
+**Meta Table Structure** (rejected):
+
+```sql
+ProductMeta (
+    MetaID (PK),
+    ProductID (FK),
+    MetaKey VARCHAR(255),
+    MetaValue TEXT
+)
+```
+
+**Why Meta Tables Were Rejected**:
+
+1. **Normalisation Violation**: Meta tables inherently violate 3NF by storing all values in a single column
+2. **Data Integrity Issues**: No type safety or domain constraints on attribute values
+3. **Query Complexity**: Requires complex pivoting and dynamic SQL generation
+4. **Performance Impact**: Difficult to index and optimise for large datasets
+5. **Referential Integrity**: Cannot enforce foreign key relationships for attribute values
+
+**Subtype/Supertype Benefits**:
+
+1. **BCNF Compliance**: Maintains proper normalisation through separate, well-structured tables
+2. **Type Safety**: Each subtype has appropriate data types and constraints
+3. **Query Efficiency**: Standard SQL operations with proper indexing
+4. **Data Integrity**: Foreign key constraints and domain validation
+5. **Performance**: Optimised for relational database operations
+
+</details>
+
+<details>
+<summary><strong>Normalisation Justification Summary</strong></summary>
+
+The logical data model achieves BCNF compliance through:
+
+- **Proper Decomposition**: Complex entities decomposed into normalised tables
+- **Elimination of Redundancy**: No duplicate data storage across tables
+- **Referential Integrity**: Foreign key constraints maintain data consistency
+- **Domain Constraints**: ENUM types and check constraints enforce business rules
+- **Subtype Pattern**: Maintains normalisation while providing flexibility
+
+This normalisation approach ensures data integrity, eliminates anomalies, and provides a solid foundation for the physical database implementation while supporting the business requirements for flexible product attribute management.
+
+</details>
+
+<details>
+<summary><strong>Research and Literature Review</strong></summary>
+
+During the design process, extensive research was conducted on database normalisation principles to ensure the logical data model follows best practices and academic standards.
+
+**Key Research Sources:**
+
+**GeeksforGeeks - Database Normalisation Fundamentals:**
+Research from [GeeksforGeeks Introduction to Database Normalization](https://www.geeksforgeeks.org/dbms/introduction-of-database-normalization/) provided foundational understanding of normalisation principles. The research emphasised that "database normalization is the process of organizing the attributes of the database to reduce or eliminate data redundancy" and highlighted how "data redundancy unnecessarily increases the size of the database as the same data is repeated in many places."
+
+**3NF vs BCNF Analysis:**
+Detailed analysis from [GeeksforGeeks Difference between 3NF and BCNF](https://www.geeksforgeeks.org/dbms/difference-between-3nf-and-bcnf-in-dbms/) informed the decision to achieve BCNF compliance. The research revealed that while "3NF is comparatively easier to achieve" and "preserves all functional dependencies," BCNF provides "stronger normalization" and "eliminates all redundancy based on functional dependencies."
+
+**Research Findings Applied to Design:**
+
+1. **BCNF Over 3NF Choice**: Based on research showing BCNF's superior elimination of redundancy and stronger normalisation, the design prioritises BCNF compliance despite the potential complexity.
+2. **Dependency Preservation Trade-offs**: Research indicated that BCNF "may or may not be preservation of all functional dependencies," which informed careful analysis of the subtype/supertype pattern to maintain referential integrity.
+3. **Performance Considerations**: The research highlighted that BCNF "may result in more complex queries with additional joins," which influenced the decision to use the subtype/supertype pattern rather than meta tables, balancing normalisation benefits with query efficiency.
+
+</details>
 
 ### 4.4 Integrity Constraints (domain, entity, referential)
 
 The logical data model enforces data integrity through various constraint types:
 
-#### **Domain Constraints**
+<details>
+<summary><strong>Domain Constraints</strong></summary>
 
 - **ENUM values** restrict Status fields to predefined values (Active, Inactive, etc.)
 - **Data types** ensure appropriate values (INTEGER for quantities, DECIMAL for prices)
 - **NOT NULL constraints** prevent missing required information
 - **CHECK constraints** validate business rules (positive quantities, valid email formats)
 
-#### **Entity Integrity Constraints**
+</details>
+
+<details>
+<summary><strong>Entity Integrity Constraints</strong></summary>
 
 - **Primary key constraints** ensure unique identification of all entities
 - **Unique constraints** prevent duplicate business identifiers (Email, SKU, ISBN)
 - **AUTO_INCREMENT** provides system-generated surrogate keys
 
-#### **Referential Integrity Constraints**
+</details>
+
+<details>
+<summary><strong>Referential Integrity Constraints</strong></summary>
 
 - **Foreign key constraints** maintain valid relationships between entities
-- **Cascade rules** define behavior for updates and deletes
+- **Cascade rules** define behaviour for updates and deletes
 - **Subtype constraints** ensure ProductType discriminator matches existing subtype tables
 
-#### **Subtype/Supertype Constraints**
+</details>
+
+<details>
+<summary><strong>Subtype/Supertype Constraints</strong></summary>
 
 - **Disjointness constraint**: Each product must belong to exactly one subtype (Electronics, Clothing, or Books)
 - **Completeness constraint**: Every product with a specific ProductType must have a corresponding record in the appropriate subtype table
 - **Discriminator constraint**: ProductType value must match the subtype table where the product record exists
 - **Referential integrity**: Subtype tables can only reference products of their specific type
+
+</details>
 
 ### 4.5 Logical ER Diagram / Relational Diagram
 
@@ -800,6 +998,13 @@ The logical data model enforces data integrity through various constraint types:
 | PK                     | Primary Key                 |
 | FK                     | Foreign Key                 |
 | SKU                    | Stock Keeping Unit          |
+| 1NF                    | First Normal Form           |
+| 2NF                    | Second Normal Form          |
+| 3NF                    | Third Normal Form           |
+| BCNF                   | Boyce-Codd Normal Form      |
+| EAV                    | Entity-Attribute-Value      |
+| SQL                    | Structured Query Language   |
+| UML                    | Unified Modeling Language   |
 
 ## Appendices
 
@@ -815,9 +1020,11 @@ The logical data model enforces data integrity through various constraint types:
 
 - [Introduction of ER Model](https://www.geeksforgeeks.org/dbms/introduction-of-er-model/)
 - [Difference between UML and ER Diagram](https://www.geeksforgeeks.org/dbms/difference-between-uml-and-er-diagram/)
+- [Introduction to Database Normalization](https://www.geeksforgeeks.org/dbms/introduction-of-database-normalization/)
+- [Difference between 3NF and BCNF in DBMS](https://www.geeksforgeeks.org/dbms/difference-between-3nf-and-bcnf-in-dbms/)
 
 **SETU Waterford** - Higher Diploma in Computer Science (Databases Module)
 
 - Learning materials and assignment guidance
 - Database design principles and methodologies
-- ER modeling concepts and best practices
+- ER modelling concepts and best practices
