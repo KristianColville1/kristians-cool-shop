@@ -127,15 +127,35 @@ Although this project is a learning exercise, it highlights how security and pri
 
 ## 2. System Description
 
+This section provides a comprehensive overview of the business system that the database will support. It identifies the problem domain, key stakeholders, business entities, and functional requirements that drive the database design. The system description serves as the foundation for the conceptual and logical data models that follow, ensuring that the database design aligns with real-world business needs and operational requirements.
+
+The analysis covers the e-commerce platform's current challenges, user requirements, and business processes that must be supported by the database system. This business-focused perspective ensures that the subsequent technical design decisions are grounded in actual operational needs rather than abstract database theory.
+
 ### 2.1 Problem Domain and Contextual Background
 
-For this project, I've chosen to design a database for Kristian's Cool Shop – an online store that sells all sorts of random but "cool" stuff. The shop has been growing quickly, which is great, but the current system is built on a clunky monolithic setup that just can't handle the traffic anymore. Pages are slowing down, customer support is constantly overwhelmed, and the whole thing is showing cracks when people hit the site during busy hours.
+This project involves designing a database for Kristian's Cool Shop, an e-commerce platform specializing in unique and novelty products. The business has experienced significant growth, but the current database architecture is unable to scale effectively to meet increased demand.
 
-Strangely enough, most of these "busy hours" seem to happen late at night, probably when people are scrolling on their phones and impulse-buying things (because of course that's when the urge to buy comes).
+**Current System Challenges:**
 
-To fix the mess, the company has decided to migrate the platform and completely rethink how the database is structured. They've even brought in a new database administrator, nicknamed Mr. Freeze for his ability to keep his cool while everything around him falls apart. His main point is that the database design is at the heart of the scaling issues, so reworking the entities, relationships, and transactions is a big part of the solution.
+- Performance degradation during peak traffic periods
+- Inadequate support for concurrent user operations
+- Limited scalability for growing product catalog and customer base
+- Inefficient data structures causing slow query response times
+- Inflexible product data model unable to accommodate category-specific attributes
+- Single product table forces all items to use identical attribute structure regardless of product type
 
-This project is about building that new design. The focus will be on mapping out the key entities (like customers, products, and orders), the relationships between them, and the operations the system needs to support so that Kristian's Cool Shop can actually keep up with demand without collapsing every time someone decides they need a novelty mug at 2am.
+**Business Requirements:**
+The new database design must support a modern e-commerce platform capable of handling:
+
+- High-volume transaction processing
+- Real-time inventory management
+- Multi-user concurrent access
+- Comprehensive customer relationship management
+- Integrated payment processing
+- Customer support ticket management
+
+**Migration Objectives:**
+The database redesign focuses on creating a scalable, normalized structure that can support current operations while providing a foundation for future growth. The new design will implement proper entity relationships, data integrity constraints, and optimized data structures to address the performance and scalability issues of the current system.
 
 ### 2.2 Stakeholders and User Requirements
 
@@ -149,6 +169,7 @@ Several stakeholder groups interact with the system, each with distinct requirem
 - **Store Administrators**
 
   - Manage product listings (add, update, or remove items).
+  - Manage category-specific product attributes (e.g., size for clothing, brand for electronics).
   - Monitor sales and generate reports.
   - Control user permissions and system settings.
 - **Customer Support Agents**
@@ -169,53 +190,60 @@ From these roles, the following user requirements were identified:
 3. Administrators must be able to update product and inventory information.
 4. Customer support must be able to link queries and tickets to specific orders or accounts.
 5. Management must be able to generate queries and reports.
+6. The system must support different product types with specialized attributes while maintaining data integrity.
 
 ### 2.3 Objects of Interest (Entities) and Their Roles
 
 This section identifies the primary business entities that the system must manage. These entities represent the core concepts and objects that exist within Kristian's Cool Shop's business domain. The focus here is on understanding what business objects need to be tracked and managed, rather than the technical details of how they will be implemented.
 
-| Entity                  | Business Role                      | Key Business Concept                               |
-| ----------------------- | ---------------------------------- | -------------------------------------------------- |
-| **Customer**      | People who interact with the store | Individuals who browse, purchase, and seek support |
-| **Product**       | Items available for sale           | Merchandise in the store's inventory               |
-| **Category**      | Product organization system        | Hierarchical structure for organizing products     |
-| **Order**         | Customer purchase transactions     | Records of what customers have bought              |
-| **OrderItem**     | Individual products within orders  | Line-level details of each product in a purchase   |
-| **Payment**       | Financial transactions             | Records of how orders were paid                    |
-| **SupportTicket** | Customer service interactions      | Issues and requests from customers                 |
-| **Employee**      | Staff members                      | People who manage the system and provide support   |
+| Entity                  | Business Role                                            | Key Business Concept                                 |
+| ----------------------- | -------------------------------------------------------- | ---------------------------------------------------- |
+| **Customer**      | People who interact with the store                       | Individuals who browse, purchase, and seek support   |
+| **Product**       | Core product information shared across all product types | Common attributes for all merchandise in inventory   |
+| **Electronics**   | Electronic products with specialized attributes          | Brand, model, warranty specifications for tech items |
+| **Clothing**      | Apparel items with size and material attributes          | Size, color, material details for clothing items     |
+| **Books**         | Publications with author and publisher information       | Author, ISBN, publisher details for book items       |
+| **Category**      | Product organization system                              | Hierarchical structure for organizing products       |
+| **Order**         | Customer purchase transactions                           | Records of what customers have bought                |
+| **OrderItem**     | Individual products within orders                        | Line-level details of each product in a purchase     |
+| **Payment**       | Financial transactions                                   | Records of how orders were paid                      |
+| **SupportTicket** | Customer service interactions                            | Issues and requests from customers                   |
+| **Employee**      | Staff members                                            | People who manage the system and provide support     |
 
 ### 2.4 Relationships Among Objects
 
 This section describes the key business relationships between entities, focusing on how the business objects interact and depend on each other. The relationships are described conceptually to understand the business logic and constraints.
 
-| Relationship                   | Business Description                            | Key Business Rule                                                      |
-| ------------------------------ | ----------------------------------------------- | ---------------------------------------------------------------------- |
-| Customer places Order          | Customers can make purchases                    | Every order must be associated with a customer                         |
-| Order contains Products        | Orders can include multiple products            | Orders track which products were purchased and in what quantities      |
-| Product belongs to Category    | Products can be organized into categories       | Products may be categorized to help customers find items               |
-| Category has subcategories     | Categories can be organized hierarchically      | Categories can have parent-child relationships for better organization |
-| Order has Payment              | Orders must be paid for                         | Orders can have associated payment records                             |
-| Customer opens SupportTicket   | Customers can request help                      | Support tickets are always linked to a customer                        |
-| SupportTicket relates to Order | Support issues may be about specific orders     | Support tickets can optionally reference specific orders               |
-| Employee handles SupportTicket | Staff members can be assigned to resolve issues | Support tickets can be assigned to employees for resolution            |
-| Employee reports to Employee   | Staff have management relationships             | Employees can have supervisors in the organizational structure         |
+| Relationship                       | Business Description                            | Key Business Rule                                                             |
+| ---------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
+| Customer places Order              | Customers can make purchases                    | Every order must be associated with a customer                                |
+| Order contains Products            | Orders can include multiple products            | Orders track which products were purchased and in what quantities             |
+| Product belongs to Category        | Products can be organized into categories       | Products may be categorized to help customers find items                      |
+| Product has specialized attributes | Products can have type-specific details         | Products must belong to exactly one subtype (Electronics, Clothing, or Books) |
+| Category has subcategories         | Categories can be organized hierarchically      | Categories can have parent-child relationships for better organization        |
+| Order has Payment                  | Orders must be paid for                         | Orders can have associated payment records                                    |
+| Customer opens SupportTicket       | Customers can request help                      | Support tickets are always linked to a customer                               |
+| SupportTicket relates to Order     | Support issues may be about specific orders     | Support tickets can optionally reference specific orders                      |
+| Employee handles SupportTicket     | Staff members can be assigned to resolve issues | Support tickets can be assigned to employees for resolution                   |
+| Employee reports to Employee       | Staff have management relationships             | Employees can have supervisors in the organizational structure                |
 
 ### 2.5 Functional Requirements (Transactions, Operations, Queries)
 
 This section outlines the key functional requirements of Kristian's Cool Shop. These requirements describe the operations the database must support for different stakeholders, including customers, administrators, and support staff. They are expressed as typical transactions or queries that demonstrate how the database will be used in practice.
 
-| Requirement                      | Stakeholder       | Example Transaction / Query                                                                |
-| -------------------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
-| Place a new order                | Customer          | Insert a new record into Order, with related OrderItem rows referencing selected Products. |
-| View order history               | Customer          | `SELECT * FROM Order WHERE CustomerID = ? ORDER BY OrderDate DESC;`                      |
-| Update stock levels              | Administrator     | `UPDATE Product SET StockQty = StockQty - ? WHERE ProductID = ?;`                        |
-| Generate sales report            | Management        | `SELECT ProductID, SUM(Quantity) FROM OrderItem GROUP BY ProductID;`                     |
-| Manage product listings          | Administrator     | Insert, update, or delete rows in Product and assign them to a Category.                   |
-| Record a payment                 | Customer / System | Insert into Payment (with subtype row in CardPayment or PayPalPayment) linked to an Order. |
-| Track unresolved support tickets | Support Agent     | `SELECT * FROM SupportTicket WHERE Status = 'Open' AND AssignedTo IS NULL;`              |
-| Escalate a ticket                | Support Agent     | Update SupportTicket with new EmployeeID (manager assignment).                             |
-| Analyse staff workload           | Management        | Count how many SupportTickets are assigned to each Employee.                               |
+| Requirement                       | Stakeholder       | Example Transaction / Query                                                                           |
+| --------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------- |
+| Place a new order                 | Customer          | Insert a new record into Order, with related OrderItem rows referencing selected Products.            |
+| View order history                | Customer          | `SELECT * FROM Order WHERE CustomerID = ? ORDER BY OrderDate DESC;`                                 |
+| Update stock levels               | Administrator     | `UPDATE Product SET StockQty = StockQty - ? WHERE ProductID = ?;`                                   |
+| Generate sales report             | Management        | `SELECT ProductID, SUM(Quantity) FROM OrderItem GROUP BY ProductID;`                                |
+| Manage product listings           | Administrator     | Insert, update, or delete rows in Product and assign them to a Category.                              |
+| Manage product subtypes           | Administrator     | Insert, update, or delete rows in Electronics, Clothing, or Books tables with appropriate attributes. |
+| Validate product type consistency | System            | Ensure Product.ProductType matches the corresponding subtype table (Electronics, Clothing, or Books). |
+| Record a payment                  | Customer / System | Insert into Payment (with subtype row in CardPayment or PayPalPayment) linked to an Order.            |
+| Track unresolved support tickets  | Support Agent     | `SELECT * FROM SupportTicket WHERE Status = 'Open' AND AssignedTo IS NULL;`                         |
+| Escalate a ticket                 | Support Agent     | Update SupportTicket with new EmployeeID (manager assignment).                                        |
+| Analyse staff workload            | Management        | Count how many SupportTickets are assigned to each Employee.                                          |
 
 ### 2.6 Assumptions, Constraints, and Dependencies
 
@@ -233,6 +261,8 @@ This section outlines the key functional requirements of Kristian's Cool Shop. T
 * Composite attributes, such as Customer Address, will be normalised into separate fields (Street, City, Postcode, Country) for clarity.
 * OrderItem is a weak entity and cannot exist without its parent Order.
 * Subtypes of Payment (CardPayment, PayPalPayment) enforce disjointness — a payment record must belong to exactly one subtype.
+* Products must be assigned to exactly one product type (Electronics, Clothing, or Books).
+* Subtype attributes are only applicable to products of the corresponding type.
 
 **Dependencies**
 
@@ -271,7 +301,8 @@ The ER model also naturally supports the advanced concepts required by the assig
 
 This section provides conceptual definitions of each entity in the data model, focusing on their business purpose and key characteristics rather than technical implementation details. The entities are defined from a business perspective to ensure the conceptual model accurately represents the real-world system.
 
-#### **Customer Entity**
+<details>
+<summary><strong>Customer Entity</strong></summary>
 
 **Business Definition**: Represents individuals who interact with Kristian's Cool Shop, including browsers, purchasers, and support requesters. Customers are the central actors in the e-commerce system and must be registered to place orders.
 
@@ -282,9 +313,12 @@ This section provides conceptual definitions of each entity in the data model, f
 - Customer information is required for order processing and support
 - Customers can have multiple orders over time
 
-#### **Product Entity**
+</details>
 
-**Business Definition**: Represents all merchandise available for purchase in the online store. Products are the core inventory items that generate revenue for the business.
+<details>
+<summary><strong>Product Entity (Supertype)</strong></summary>
+
+**Business Definition**: Represents the core product information shared across all product types in the online store. This entity serves as the supertype that contains common attributes for all merchandise, while specialized attributes are managed through subtype entities.
 
 **Key Business Characteristics**:
 
@@ -292,8 +326,55 @@ This section provides conceptual definitions of each entity in the data model, f
 - Products exist independently of orders (inventory items)
 - Products can be organized into categories for better customer navigation
 - Product information includes pricing and availability status
+- Every product must belong to exactly one subtype (Electronics, Clothing, or Books)
+- Common attributes are stored in the supertype, specialized attributes in subtypes
 
-#### **Category Entity**
+</details>
+
+<details>
+<summary><strong>Electronics Entity (Subtype)</strong></summary>
+
+**Business Definition**: Represents electronic products with specialized attributes specific to technology items. This subtype contains attributes that are only relevant to electronic products.
+
+**Key Business Characteristics**:
+
+- Contains brand, model, and warranty information for electronic items
+- Dependent on the Product supertype for core product information
+- Attributes are only applicable to products classified as electronics
+- Supports detailed product specifications for technical items
+
+</details>
+
+<details>
+<summary><strong>Clothing Entity (Subtype)</strong></summary>
+
+**Business Definition**: Represents apparel items with specialized attributes specific to clothing and fashion items. This subtype contains attributes that are only relevant to clothing products.
+
+**Key Business Characteristics**:
+
+- Contains size, color, material, and care instruction information
+- Dependent on the Product supertype for core product information
+- Attributes are only applicable to products classified as clothing
+- Supports detailed product specifications for fashion items
+
+</details>
+
+<details>
+<summary><strong>Books Entity (Subtype)</strong></summary>
+
+**Business Definition**: Represents publications with specialized attributes specific to books and printed materials. This subtype contains attributes that are only relevant to book products.
+
+**Key Business Characteristics**:
+
+- Contains author, ISBN, publisher, and page count information
+- Dependent on the Product supertype for core product information
+- Attributes are only applicable to products classified as books
+- Supports detailed product specifications for literary items
+
+</details>
+
+<details>
+<summary><strong>Category Entity</strong></summary>
 
 **Business Definition**: Represents the organizational structure used to group and classify products. Categories help customers navigate the product catalog and find items of interest.
 
@@ -304,7 +385,10 @@ This section provides conceptual definitions of each entity in the data model, f
 - The category structure supports flexible product organization
 - Categories help customers browse and filter products
 
-#### **Order Entity**
+</details>
+
+<details>
+<summary><strong>Order Entity</strong></summary>
 
 **Business Definition**: Represents a customer's purchase transaction. Orders capture the business event of a customer deciding to buy products from the store.
 
@@ -315,7 +399,10 @@ This section provides conceptual definitions of each entity in the data model, f
 - Orders have a lifecycle from creation to completion
 - Orders can contain multiple products with different quantities
 
-#### **OrderItem Entity (Weak Entity)**
+</details>
+
+<details>
+<summary><strong>OrderItem Entity (Weak Entity)</strong></summary>
 
 **Business Definition**: Represents individual products within an order, capturing the specific details of what was purchased. OrderItems are dependent on their parent order and cannot exist independently.
 
@@ -326,7 +413,10 @@ This section provides conceptual definitions of each entity in the data model, f
 - OrderItems preserve historical pricing information
 - OrderItems resolve the many-to-many relationship between orders and products
 
-#### **Payment Entity**
+</details>
+
+<details>
+<summary><strong>Payment Entity</strong></summary>
 
 **Business Definition**: Represents financial transactions associated with orders. Payments record how customers pay for their purchases and support multiple payment methods.
 
@@ -337,7 +427,10 @@ This section provides conceptual definitions of each entity in the data model, f
 - Different payment methods may have different characteristics
 - Payment records support financial reconciliation and reporting
 
-#### **SupportTicket Entity**
+</details>
+
+<details>
+<summary><strong>SupportTicket Entity</strong></summary>
 
 **Business Definition**: Represents customer service interactions and issues. SupportTickets manage the communication and resolution process between customers and support staff.
 
@@ -348,7 +441,10 @@ This section provides conceptual definitions of each entity in the data model, f
 - Support tickets can be assigned to employees for resolution
 - Support tickets have a lifecycle from creation to resolution
 
-#### **Employee Entity**
+</details>
+
+<details>
+<summary><strong>Employee Entity</strong></summary>
 
 **Business Definition**: Represents staff members who manage the system, handle customer support, and perform administrative functions. Employees are the internal users of the system.
 
@@ -359,22 +455,95 @@ This section provides conceptual definitions of each entity in the data model, f
 - Employees have different roles and responsibilities
 - Employee information supports workload management and escalation
 
+</details>
+
 ### 3.3 Relationships and Cardinalities
 
 ### 3.4 Constraints and Business Rules (conceptual level)
 
 ### 3.5 Advanced Data Modelling Features
 
-- **Multivalued Attributes**
-- **Recursive Relationships**
-- **Subtype/Supertype Structures**
-- **Weak Entities**
+The conceptual data model incorporates several advanced database modeling concepts to handle the complexity of the e-commerce system:
+
+- **Multivalued Attributes**: Attributes that can have multiple values for a single entity instance
+- **Recursive Relationships**: Self-referencing relationships that model hierarchical structures (Category parent-child relationships, Employee management hierarchy)
+- **Subtype/Supertype Structures**: The Product entity serves as a supertype with Electronics, Clothing, and Books as subtypes. This allows for shared common attributes (name, price, stock) while supporting specialized attributes (brand for electronics, size for clothing, author for books). The relationship enforces disjointness - each product belongs to exactly one subtype
+- **Weak Entities**: OrderItem is a weak entity that depends on its parent Order for existence and identity
 
 ### 3.6 Conceptual ER Diagram (annotated)
 
 ## 4. Logical Data Model
 
+The Logical Data Model represents the detailed technical specification of the database design, translating the conceptual business model from Section 3 into a formal relational structure that can be implemented in a database management system. This section focuses on the technical aspects of data storage, relationships, and constraints without considering the specific implementation details of any particular database platform.
+
+The logical model serves as the bridge between the business-focused conceptual model and the physical database implementation. It defines the precise structure of tables, attributes, data types, and relationships that will support all the business requirements identified in the earlier sections while ensuring data integrity and optimal performance.
+
 ### 4.1 Mapping Process from Conceptual to Logical
+
+The transformation from the conceptual data model to the logical data model follows established database design principles and involves several key mapping processes:
+
+<details>
+<summary><strong>Entity-to-Table Mapping</strong></summary>
+
+Each entity identified in the conceptual model is mapped to a corresponding table in the logical model:
+
+- **Strong entities** become independent tables with their own primary keys
+- **Weak entities** become tables with composite primary keys that include foreign keys to their parent entities
+- **Entity attributes** become table columns with appropriate data types and constraints
+- **Subtype/supertype relationships** are implemented using separate tables with foreign key relationships to the supertype
+
+</details>
+
+<details>
+<summary><strong>Relationship Mapping</strong></summary>
+
+The relationships defined in the conceptual model are implemented through foreign key constraints:
+
+- **One-to-many relationships** are implemented using foreign keys in the "many" side table
+- **Many-to-many relationships** are resolved through intermediate tables (like OrderItem)
+- **Recursive relationships** are implemented using self-referencing foreign keys
+- **Subtype/supertype relationships** are implemented using separate tables with foreign key relationships
+
+</details>
+
+<details>
+<summary><strong>Subtype/Supertype Implementation</strong></summary>
+
+The Product supertype and its subtypes (Electronics, Clothing, Books) are implemented as follows:
+
+- **Product table** contains common attributes (ProductID, Name, Description, UnitPrice, StockQty, Status, ProductType)
+- **ProductType discriminator** column indicates which subtype table contains additional attributes
+- **Subtype tables** (Electronics, Clothing, Books) use ProductID as both primary key and foreign key to Product
+- **Disjointness constraint** ensures each product belongs to exactly one subtype
+- **Referential integrity** is maintained through foreign key constraints between subtype tables and Product
+
+</details>
+
+<details>
+<summary><strong>Attribute Transformation</strong></summary>
+
+Conceptual attributes are transformed into technical specifications:
+
+- **Composite attributes** (like Address) are decomposed into separate columns
+- **Multivalued attributes** are handled through separate tables or normalization
+- **Derived attributes** are either stored as computed columns or calculated at query time
+- **Business identifiers** are preserved alongside system-generated surrogate keys
+
+</details>
+
+<details>
+<summary><strong>Constraint Implementation</strong></summary>
+
+Business rules and constraints from the conceptual model are enforced through:
+
+- **Primary key constraints** ensuring entity uniqueness
+- **Foreign key constraints** maintaining referential integrity
+- **Check constraints** enforcing domain rules and business logic
+- **Unique constraints** preventing duplicate business identifiers
+
+</details>
+
+This mapping process ensures that all business requirements captured in the conceptual model are properly supported by the logical database structure while maintaining data integrity and supporting efficient query operations.
 
 ### 4.2 Relational Schema (Tables, Primary Keys, Foreign Keys)
 
@@ -406,6 +575,37 @@ This section provides the detailed technical specifications for each entity, inc
 | UnitPrice   | DECIMAL(10,2)                                  | NOT NULL                    | Current selling price              |
 | StockQty    | INTEGER                                        | NOT NULL, DEFAULT 0         | Available inventory quantity       |
 | Status      | ENUM('Active', 'Discontinued', 'Out of Stock') | NOT NULL, DEFAULT 'Active'  | Product availability status        |
+| ProductType | ENUM('Electronics', 'Clothing', 'Books')       | NOT NULL                    | Discriminator for subtype tables   |
+
+#### **Electronics Table (Subtype)**
+
+| Attribute      | Data Type    | Constraints                                            | Description                 |
+| -------------- | ------------ | ------------------------------------------------------ | --------------------------- |
+| ProductID      | INTEGER      | PRIMARY KEY, FOREIGN KEY REFERENCES Product(ProductID) | Reference to parent product |
+| Brand          | VARCHAR(100) | NOT NULL                                               | Manufacturer or brand name  |
+| Model          | VARCHAR(100) | NULL                                                   | Product model number        |
+| WarrantyPeriod | INTEGER      | NULL                                                   | Warranty period in months   |
+| Specifications | TEXT         | NULL                                                   | Technical specifications    |
+
+#### **Clothing Table (Subtype)**
+
+| Attribute        | Data Type    | Constraints                                            | Description                       |
+| ---------------- | ------------ | ------------------------------------------------------ | --------------------------------- |
+| ProductID        | INTEGER      | PRIMARY KEY, FOREIGN KEY REFERENCES Product(ProductID) | Reference to parent product       |
+| Size             | VARCHAR(20)  | NOT NULL                                               | Clothing size (S, M, L, XL, etc.) |
+| Color            | VARCHAR(50)  | NOT NULL                                               | Primary color of the item         |
+| Material         | VARCHAR(100) | NULL                                                   | Fabric or material composition    |
+| CareInstructions | TEXT         | NULL                                                   | Washing and care instructions     |
+
+#### **Books Table (Subtype)**
+
+| Attribute | Data Type    | Constraints                                            | Description                        |
+| --------- | ------------ | ------------------------------------------------------ | ---------------------------------- |
+| ProductID | INTEGER      | PRIMARY KEY, FOREIGN KEY REFERENCES Product(ProductID) | Reference to parent product        |
+| Author    | VARCHAR(255) | NOT NULL                                               | Book author name                   |
+| ISBN      | VARCHAR(20)  | UNIQUE, NULL                                           | International Standard Book Number |
+| Pages     | INTEGER      | NULL                                                   | Number of pages                    |
+| Publisher | VARCHAR(255) | NULL                                                   | Publishing company                 |
 
 #### **Category Table**
 
@@ -487,6 +687,34 @@ This section provides the detailed technical specifications for each entity, inc
 ### 4.3 Normalization and Justification (1NF → 3NF or BCNF if applicable)
 
 ### 4.4 Integrity Constraints (domain, entity, referential)
+
+The logical data model enforces data integrity through various constraint types:
+
+#### **Domain Constraints**
+
+- **ENUM values** restrict Status fields to predefined values (Active, Inactive, etc.)
+- **Data types** ensure appropriate values (INTEGER for quantities, DECIMAL for prices)
+- **NOT NULL constraints** prevent missing required information
+- **CHECK constraints** validate business rules (positive quantities, valid email formats)
+
+#### **Entity Integrity Constraints**
+
+- **Primary key constraints** ensure unique identification of all entities
+- **Unique constraints** prevent duplicate business identifiers (Email, SKU, ISBN)
+- **AUTO_INCREMENT** provides system-generated surrogate keys
+
+#### **Referential Integrity Constraints**
+
+- **Foreign key constraints** maintain valid relationships between entities
+- **Cascade rules** define behavior for updates and deletes
+- **Subtype constraints** ensure ProductType discriminator matches existing subtype tables
+
+#### **Subtype/Supertype Constraints**
+
+- **Disjointness constraint**: Each product must belong to exactly one subtype (Electronics, Clothing, or Books)
+- **Completeness constraint**: Every product with a specific ProductType must have a corresponding record in the appropriate subtype table
+- **Discriminator constraint**: ProductType value must match the subtype table where the product record exists
+- **Referential integrity**: Subtype tables can only reference products of their specific type
 
 ### 4.5 Logical ER Diagram / Relational Diagram
 
