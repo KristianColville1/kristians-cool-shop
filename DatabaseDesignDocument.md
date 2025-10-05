@@ -3,8 +3,11 @@
 ![DatabaseImage](docs/images/database-storage.png)
 
 **Kristian Colville**
+
 **W20114790**
+
 **Databases**
+
 **11/10/2025**
 
 ## Table of Contents
@@ -46,17 +49,28 @@
 
 ## Revision History
 
-| Date       | Version | Author            | Change/Note                                                                                                     |
-| ---------- | ------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
-| 28-09-2025 | 0.1     | Kristian Colville | Initial draft, rough outline with table of contents. Prepping sections and overall information to be included.  |
-| 28-09-2025 | 0.1.1   | Kristian Colville | Defined purpose, edited and drafted section 1.                                                                  |
-| 01-10-2025 | 0.2     | Kristian Colville | Started Section 2, chose problem domain for assignment.                                                         |
-| 01-10-2025 | 0.2.1   | Kristian Colville | Extracted database user requirements from the problem domain.                                                   |
-| 02-10-2025 | 0.2.2   | Kristian Colville | Created table for objects of interest and formatted.                                                            |
-| 02-10-2025 | 0.2.3   | Kristian Colville | Started working on the relationships and formatting for table.                                                  |
-| 02-10-2025 | 0.2.4   | Kristian Colville | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again. |
-| 02-10-2025 | 0.2.5   | Kristian Colville | Converted document to markdown file with libre office and set up github repo for project. I hate word.          |
-| 02-10-2025 | 0.3     | Kristian Colville | Started working on drafting section 3 and figuring out what to do next.                                         |
+| Date       | Version | Author         | Change/Note                                                                                                              |
+| ---------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 28-09-2025 | 0.1     | Document Owner | Initial draft, rough outline with table of contents. Prepping sections and overall information to be included.           |
+| 28-09-2025 | 0.1.1   | Document Owner | Defined purpose, edited and drafted section 1.                                                                           |
+| 01-10-2025 | 0.2     | Document Owner | Started Section 2, chose problem domain for assignment.                                                                  |
+| 01-10-2025 | 0.2.1   | Document Owner | Extracted database user requirements from the problem domain.                                                            |
+| 02-10-2025 | 0.2.2   | Document Owner | Created table for objects of interest and formatted.                                                                     |
+| 02-10-2025 | 0.2.3   | Document Owner | Started working on the relationships and formatting for table.                                                           |
+| 02-10-2025 | 0.2.4   | Document Owner | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again.          |
+| 02-10-2025 | 0.2.5   | Document Owner | Converted document to markdown file with libre office and set up github repo for project. I hate word.                   |
+| 02-10-2025 | 0.3     | Document Owner | Started working on drafting section 3 and figuring out what to do next.                                                  |
+| 05-10-2025 | 0.3.1   | Document Owner | Proofing document. Identified several formatting issues to fix.                                                          |
+| 05-10-2025 | 0.4     | Document Owner | Identified redundancy between sections 2 and 3 - detailed technical specs were repeated                                  |
+| 05-10-2025 | 0.4.1   | Document Owner | Moved detailed entity attributes and cardinalities from Section 2 to Section 4 (Logical Data Model)                      |
+| 05-10-2025 | 0.4.2   | Document Owner | Rewrote Section 2.3 and 2.4 to be business-focused and conceptual only                                                   |
+| 05-10-2025 | 0.4.3   | Document Owner | Updated Section 3.2 to provide proper conceptual entity definitions                                                      |
+| 05-10-2025 | 0.4.4   | Document Owner | Created Section 4 (Logical Data Model) with all detailed technical specifications                                        |
+| 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation |
+|            |         |                |                                                                                                                          |
+|            |         |                |                                                                                                                          |
+|            |         |                |                                                                                                                          |
+|            |         |                |                                                                                                                          |
 
 ## 1. Purpose
 
@@ -158,32 +172,34 @@ From these roles, the following user requirements were identified:
 
 ### 2.3 Objects of Interest (Entities) and Their Roles
 
-This section lists the primary entities that make up the database design. Each entity represents a real-world object or concept in the system, such as customers, products, or orders. Their attributes, including primary and foreign keys, will later be used to construct the ER diagram and logical schema. The table below provides a concise description of these entities and their roles within the system.
+This section identifies the primary business entities that the system must manage. These entities represent the core concepts and objects that exist within Kristian's Cool Shop's business domain. The focus here is on understanding what business objects need to be tracked and managed, rather than the technical details of how they will be implemented.
 
-| Entity                  | Role                                                               | Key Attributes                                                                                                                                                                                                                                       |
-| ----------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Customer**      | People who browse, buy and contact support.                        | CustomerID (PK)<br />Email (unique)<br />FullName<br />Phone<br />Address (composite: Street, City, Postcode, Country)<br />CreatedAt<br />Status                                                                                                    |
-| **Product**       | Items for sale.                                                    | ProductID (PK)<br />SKU (unique)<br />Name<br />Description<br />UnitPrice<br />StockQty<br />Status                                                                                                                                                 |
-| **Category**      | Organises products, supports nested categories.                    | CategoryID (PK)<br />Name<br />ParentCategoryID (recursive, nullable)                                                                                                                                                                                |
-| **Order**         | A customer purchase event                                          | OrderID (PK)<br />OrderDate<br />Status<br />TotalAmount<br />CustomerID (FK)                                                                                                                                                                        |
-| **OrderItem**     | Links an Order to the Products purchased, with line-level details. | OrderID (FK, part of PK)<br />LineNo (part of PK)<br />ProductID (FK)<br /><br />Descriptive attributes: Quantity, UnitPriceAtOrder, LineSubtotal.<br /><br />Why weak? It has no meaning without its owning Order; identified by (OrderID, LineNo). |
-| **Payment**       | Records how an order was paid.                                     | PaymentID (PK)<br />OrderID (FK)<br />Amount<br />PaidAt<br />Status<br />MethodType                                                                                                                                                                 |
-| **SupportTicket** | Customer issues linked to orders/products.                         | TicketID (PK)<br />OpenedAt<br />Status<br />Priority<br />CustomerID (FK)<br />OrderID (FK, nullable)<br />AssignedTo (FK → Employee, nullable)<br />Subject                                                                                       |
-| **Employee**      | Admin/support staff                                                | EmployeeID (PK)<br />FullName<br />Email (unique)<br />Role<br />ManagerID (recursive, nullable).                                                                                                                                                    |
+| Entity                  | Business Role                      | Key Business Concept                               |
+| ----------------------- | ---------------------------------- | -------------------------------------------------- |
+| **Customer**      | People who interact with the store | Individuals who browse, purchase, and seek support |
+| **Product**       | Items available for sale           | Merchandise in the store's inventory               |
+| **Category**      | Product organization system        | Hierarchical structure for organizing products     |
+| **Order**         | Customer purchase transactions     | Records of what customers have bought              |
+| **OrderItem**     | Individual products within orders  | Line-level details of each product in a purchase   |
+| **Payment**       | Financial transactions             | Records of how orders were paid                    |
+| **SupportTicket** | Customer service interactions      | Issues and requests from customers                 |
+| **Employee**      | Staff members                      | People who manage the system and provide support   |
 
 ### 2.4 Relationships Among Objects
 
-| Relationship                                   | Cardinality               | Participation                                         | Attributes                 | Rationale                                                                   |
-| ---------------------------------------------- | ------------------------- | ----------------------------------------------------- | -------------------------- | --------------------------------------------------------------------------- |
-| Customer places Order                          | 1 ⟶ 0..*                 | Customer = partial, Order = total                     |                            | Every order must belong to a customer; not every customer places an order.  |
-| Order contains Product (via OrderItem – weak) | M:N resolved by OrderItem | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder | OrderItem depends on Order; records product quantities at time of purchase. |
-| Product belongs to Category                    | Many ⟶ 0..1              | Product = partial, Category = partial                 |                            | Products may or may not be categorised; categories may be empty.            |
-| Category parent-of Category (recursive)        | 0..1 ⟶ 0..*              | Parent = partial, Child = partial                     |                            | Supports multi-level catalogue; prevents cycles.                            |
-| Order paid by Payment                          | 1 ⟶ 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt             | Orders can exist before payment; every payment must belong to an order.     |
-| SupportTicket opened by Customer               | 0..* ⟶ 1                 | Customer = partial, Ticket = total                    |                            | Every ticket must belong to a customer; some customers never open tickets.  |
-| SupportTicket refers to Order                  | 0..* ⟶ 0..1              | Both partial                                          |                            | A ticket may or may not be linked to an order.                              |
-| SupportTicket assigned to Employee             | 0..* ⟶ 0..1              | Both partial                                          | AssignedAt                 | Tickets may be unassigned; some employees may have none.                    |
-| Employee reports to Employee (recursive)       | 0..1 ⟶ 0..*              | Both partial                                          |                            | Models reporting lines; not all employees are managers.                     |
+This section describes the key business relationships between entities, focusing on how the business objects interact and depend on each other. The relationships are described conceptually to understand the business logic and constraints.
+
+| Relationship                   | Business Description                            | Key Business Rule                                                      |
+| ------------------------------ | ----------------------------------------------- | ---------------------------------------------------------------------- |
+| Customer places Order          | Customers can make purchases                    | Every order must be associated with a customer                         |
+| Order contains Products        | Orders can include multiple products            | Orders track which products were purchased and in what quantities      |
+| Product belongs to Category    | Products can be organized into categories       | Products may be categorized to help customers find items               |
+| Category has subcategories     | Categories can be organized hierarchically      | Categories can have parent-child relationships for better organization |
+| Order has Payment              | Orders must be paid for                         | Orders can have associated payment records                             |
+| Customer opens SupportTicket   | Customers can request help                      | Support tickets are always linked to a customer                        |
+| SupportTicket relates to Order | Support issues may be about specific orders     | Support tickets can optionally reference specific orders               |
+| Employee handles SupportTicket | Staff members can be assigned to resolve issues | Support tickets can be assigned to employees for resolution            |
+| Employee reports to Employee   | Staff have management relationships             | Employees can have supervisors in the organizational structure         |
 
 ### 2.5 Functional Requirements (Transactions, Operations, Queries)
 
@@ -253,6 +269,96 @@ The ER model also naturally supports the advanced concepts required by the assig
 
 ### 3.2 Entity Definitions and Attributes
 
+This section provides conceptual definitions of each entity in the data model, focusing on their business purpose and key characteristics rather than technical implementation details. The entities are defined from a business perspective to ensure the conceptual model accurately represents the real-world system.
+
+#### **Customer Entity**
+
+**Business Definition**: Represents individuals who interact with Kristian's Cool Shop, including browsers, purchasers, and support requesters. Customers are the central actors in the e-commerce system and must be registered to place orders.
+
+**Key Business Characteristics**:
+
+- Each customer has a unique identity within the system
+- Customers can exist independently of orders (they may browse without purchasing)
+- Customer information is required for order processing and support
+- Customers can have multiple orders over time
+
+#### **Product Entity**
+
+**Business Definition**: Represents all merchandise available for purchase in the online store. Products are the core inventory items that generate revenue for the business.
+
+**Key Business Characteristics**:
+
+- Each product has a unique business identifier (SKU)
+- Products exist independently of orders (inventory items)
+- Products can be organized into categories for better customer navigation
+- Product information includes pricing and availability status
+
+#### **Category Entity**
+
+**Business Definition**: Represents the organizational structure used to group and classify products. Categories help customers navigate the product catalog and find items of interest.
+
+**Key Business Characteristics**:
+
+- Categories can be organized hierarchically (parent-child relationships)
+- Categories can exist independently of products (empty categories are allowed)
+- The category structure supports flexible product organization
+- Categories help customers browse and filter products
+
+#### **Order Entity**
+
+**Business Definition**: Represents a customer's purchase transaction. Orders capture the business event of a customer deciding to buy products from the store.
+
+**Key Business Characteristics**:
+
+- Every order must be associated with a customer
+- Orders represent the business transaction, not just a shopping cart
+- Orders have a lifecycle from creation to completion
+- Orders can contain multiple products with different quantities
+
+#### **OrderItem Entity (Weak Entity)**
+
+**Business Definition**: Represents individual products within an order, capturing the specific details of what was purchased. OrderItems are dependent on their parent order and cannot exist independently.
+
+**Key Business Characteristics**:
+
+- OrderItems have no meaning without their parent order
+- Each OrderItem captures the quantity and pricing at the time of purchase
+- OrderItems preserve historical pricing information
+- OrderItems resolve the many-to-many relationship between orders and products
+
+#### **Payment Entity**
+
+**Business Definition**: Represents financial transactions associated with orders. Payments record how customers pay for their purchases and support multiple payment methods.
+
+**Key Business Characteristics**:
+
+- Every payment must be associated with an order
+- Payments can be processed after order creation
+- Different payment methods may have different characteristics
+- Payment records support financial reconciliation and reporting
+
+#### **SupportTicket Entity**
+
+**Business Definition**: Represents customer service interactions and issues. SupportTickets manage the communication and resolution process between customers and support staff.
+
+**Key Business Characteristics**:
+
+- Every support ticket must be associated with a customer
+- Support tickets can optionally reference specific orders
+- Support tickets can be assigned to employees for resolution
+- Support tickets have a lifecycle from creation to resolution
+
+#### **Employee Entity**
+
+**Business Definition**: Represents staff members who manage the system, handle customer support, and perform administrative functions. Employees are the internal users of the system.
+
+**Key Business Characteristics**:
+
+- Employees can be assigned to handle support tickets
+- Employees can have management relationships (supervisor-subordinate)
+- Employees have different roles and responsibilities
+- Employee information supports workload management and escalation
+
 ### 3.3 Relationships and Cardinalities
 
 ### 3.4 Constraints and Business Rules (conceptual level)
@@ -271,6 +377,112 @@ The ER model also naturally supports the advanced concepts required by the assig
 ### 4.1 Mapping Process from Conceptual to Logical
 
 ### 4.2 Relational Schema (Tables, Primary Keys, Foreign Keys)
+
+This section provides the detailed technical specifications for each entity, including all attributes, data types, primary keys, foreign keys, and constraints. This represents the logical data model that will be implemented in the database system.
+
+#### **Customer Table**
+
+| Attribute  | Data Type                               | Constraints                         | Description                                 |
+| ---------- | --------------------------------------- | ----------------------------------- | ------------------------------------------- |
+| CustomerID | INTEGER                                 | PRIMARY KEY, AUTO_INCREMENT         | Unique identifier for each customer         |
+| Email      | VARCHAR(255)                            | UNIQUE, NOT NULL                    | Customer's email address for authentication |
+| FullName   | VARCHAR(255)                            | NOT NULL                            | Customer's complete name                    |
+| Phone      | VARCHAR(20)                             | NULL                                | Contact phone number                        |
+| Street     | VARCHAR(255)                            | NULL                                | Street address                              |
+| City       | VARCHAR(100)                            | NULL                                | City name                                   |
+| Postcode   | VARCHAR(20)                             | NULL                                | Postal code                                 |
+| Country    | VARCHAR(100)                            | NULL                                | Country name                                |
+| CreatedAt  | TIMESTAMP                               | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Account creation timestamp                  |
+| Status     | ENUM('Active', 'Suspended', 'Inactive') | NOT NULL, DEFAULT 'Active'          | Account status                              |
+
+#### **Product Table**
+
+| Attribute   | Data Type                                      | Constraints                 | Description                        |
+| ----------- | ---------------------------------------------- | --------------------------- | ---------------------------------- |
+| ProductID   | INTEGER                                        | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for each product |
+| SKU         | VARCHAR(50)                                    | UNIQUE, NOT NULL            | Stock Keeping Unit for inventory   |
+| Name        | VARCHAR(255)                                   | NOT NULL                    | Product name                       |
+| Description | TEXT                                           | NULL                        | Detailed product description       |
+| UnitPrice   | DECIMAL(10,2)                                  | NOT NULL                    | Current selling price              |
+| StockQty    | INTEGER                                        | NOT NULL, DEFAULT 0         | Available inventory quantity       |
+| Status      | ENUM('Active', 'Discontinued', 'Out of Stock') | NOT NULL, DEFAULT 'Active'  | Product availability status        |
+
+#### **Category Table**
+
+| Attribute        | Data Type    | Constraints                                       | Description                         |
+| ---------------- | ------------ | ------------------------------------------------- | ----------------------------------- |
+| CategoryID       | INTEGER      | PRIMARY KEY, AUTO_INCREMENT                       | Unique identifier for each category |
+| Name             | VARCHAR(255) | NOT NULL                                          | Category name                       |
+| ParentCategoryID | INTEGER      | NULL, FOREIGN KEY REFERENCES Category(CategoryID) | Reference to parent category        |
+
+#### **Order Table**
+
+| Attribute   | Data Type                                                          | Constraints                                           | Description                      |
+| ----------- | ------------------------------------------------------------------ | ----------------------------------------------------- | -------------------------------- |
+| OrderID     | INTEGER                                                            | PRIMARY KEY, AUTO_INCREMENT                           | Unique identifier for each order |
+| OrderDate   | TIMESTAMP                                                          | NOT NULL, DEFAULT CURRENT_TIMESTAMP                   | Order creation timestamp         |
+| Status      | ENUM('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled') | NOT NULL, DEFAULT 'Pending'                           | Current order status             |
+| TotalAmount | DECIMAL(10,2)                                                      | NOT NULL                                              | Calculated total value           |
+| CustomerID  | INTEGER                                                            | NOT NULL, FOREIGN KEY REFERENCES Customer(CustomerID) | Reference to customer            |
+
+#### **OrderItem Table (Weak Entity)**
+
+| Attribute        | Data Type     | Constraints                                         | Description                         |
+| ---------------- | ------------- | --------------------------------------------------- | ----------------------------------- |
+| OrderID          | INTEGER       | PRIMARY KEY, FOREIGN KEY REFERENCES Order(OrderID)  | Reference to parent order           |
+| LineNo           | INTEGER       | PRIMARY KEY                                         | Sequential line number within order |
+| ProductID        | INTEGER       | NOT NULL, FOREIGN KEY REFERENCES Product(ProductID) | Reference to product                |
+| Quantity         | INTEGER       | NOT NULL                                            | Number of units ordered             |
+| UnitPriceAtOrder | DECIMAL(10,2) | NOT NULL                                            | Price per unit at time of order     |
+| LineSubtotal     | DECIMAL(10,2) | NOT NULL                                            | Calculated line total               |
+
+#### **Payment Table**
+
+| Attribute  | Data Type                                          | Constraints                                     | Description                        |
+| ---------- | -------------------------------------------------- | ----------------------------------------------- | ---------------------------------- |
+| PaymentID  | INTEGER                                            | PRIMARY KEY, AUTO_INCREMENT                     | Unique identifier for each payment |
+| OrderID    | INTEGER                                            | NOT NULL, FOREIGN KEY REFERENCES Order(OrderID) | Reference to order being paid      |
+| Amount     | DECIMAL(10,2)                                      | NOT NULL                                        | Payment amount                     |
+| PaidAt     | TIMESTAMP                                          | NULL                                            | Payment processing timestamp       |
+| Status     | ENUM('Pending', 'Completed', 'Failed', 'Refunded') | NOT NULL, DEFAULT 'Pending'                     | Payment status                     |
+| MethodType | ENUM('Card', 'PayPal', 'Bank Transfer')            | NOT NULL                                        | Payment method category            |
+
+#### **SupportTicket Table**
+
+| Attribute  | Data Type                                         | Constraints                                           | Description                       |
+| ---------- | ------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
+| TicketID   | INTEGER                                           | PRIMARY KEY, AUTO_INCREMENT                           | Unique identifier for each ticket |
+| OpenedAt   | TIMESTAMP                                         | NOT NULL, DEFAULT CURRENT_TIMESTAMP                   | Ticket creation timestamp         |
+| Status     | ENUM('Open', 'In Progress', 'Resolved', 'Closed') | NOT NULL, DEFAULT 'Open'                              | Current ticket status             |
+| Priority   | ENUM('Low', 'Medium', 'High', 'Critical')         | NOT NULL, DEFAULT 'Medium'                            | Issue priority level              |
+| CustomerID | INTEGER                                           | NOT NULL, FOREIGN KEY REFERENCES Customer(CustomerID) | Reference to customer             |
+| OrderID    | INTEGER                                           | NULL, FOREIGN KEY REFERENCES Order(OrderID)           | Reference to related order        |
+| AssignedTo | INTEGER                                           | NULL, FOREIGN KEY REFERENCES Employee(EmployeeID)     | Reference to assigned employee    |
+| Subject    | VARCHAR(255)                                      | NOT NULL                                              | Brief description of issue        |
+
+#### **Employee Table**
+
+| Attribute  | Data Type                                         | Constraints                                       | Description                         |
+| ---------- | ------------------------------------------------- | ------------------------------------------------- | ----------------------------------- |
+| EmployeeID | INTEGER                                           | PRIMARY KEY, AUTO_INCREMENT                       | Unique identifier for each employee |
+| FullName   | VARCHAR(255)                                      | NOT NULL                                          | Employee's complete name            |
+| Email      | VARCHAR(255)                                      | UNIQUE, NOT NULL                                  | Work email address                  |
+| Role       | ENUM('Administrator', 'Support Agent', 'Manager') | NOT NULL                                          | Job function                        |
+| ManagerID  | INTEGER                                           | NULL, FOREIGN KEY REFERENCES Employee(EmployeeID) | Reference to direct supervisor      |
+
+#### **Relationship Specifications with Cardinalities**
+
+| Relationship                             | Cardinality               | Participation                                         | Attributes                               | Rationale                                                                  |
+| ---------------------------------------- | ------------------------- | ----------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------- |
+| Customer places Order                    | 1 ⟶ 0..*                 | Customer = partial, Order = total                     |                                          | Every order must belong to a customer; not every customer places an order  |
+| Order contains Product (via OrderItem)   | M:N resolved by OrderItem | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder, LineSubtotal | OrderItem depends on Order; records product quantities at time of purchase |
+| Product belongs to Category              | Many ⟶ 0..1              | Product = partial, Category = partial                 |                                          | Products may or may not be categorised; categories may be empty            |
+| Category parent-of Category (recursive)  | 0..1 ⟶ 0..*              | Parent = partial, Child = partial                     |                                          | Supports multi-level catalogue; prevents cycles                            |
+| Order paid by Payment                    | 1 ⟶ 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt, Status                   | Orders can exist before payment; every payment must belong to an order     |
+| SupportTicket opened by Customer         | 0..* ⟶ 1                 | Customer = partial, Ticket = total                    |                                          | Every ticket must belong to a customer; some customers never open tickets  |
+| SupportTicket refers to Order            | 0..* ⟶ 0..1              | Both partial                                          |                                          | A ticket may or may not be linked to an order                              |
+| SupportTicket assigned to Employee       | 0..* ⟶ 0..1              | Both partial                                          |                                          | Tickets may be unassigned; some employees may have none                    |
+| Employee reports to Employee (recursive) | 0..1 ⟶ 0..*              | Both partial                                          |                                          | Models reporting lines; not all employees are managers                     |
 
 ### 4.3 Normalization and Justification (1NF → 3NF or BCNF if applicable)
 
