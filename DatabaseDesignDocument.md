@@ -67,7 +67,7 @@
 | 05-10-2025 | 0.4.3   | Document Owner | Updated Section 3.2 to provide proper conceptual entity definitions                                                      |
 | 05-10-2025 | 0.4.4   | Document Owner | Created Section 4 (Logical Data Model) with all detailed technical specifications                                        |
 | 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation |
-|            |         |                |                                                                                                                          |
+| 05-10-2025 | 0.4.6   | Document Owner | Added subtype/supertype pattern for products and edited sections 2 to 4                                                  |
 |            |         |                |                                                                                                                          |
 |            |         |                |                                                                                                                          |
 |            |         |                |                                                                                                                          |
@@ -459,7 +459,66 @@ This section provides conceptual definitions of each entity in the data model, f
 
 ### 3.3 Relationships and Cardinalities
 
+This section defines the conceptual relationships between entities and their cardinality constraints. Cardinality rules specify how many instances of one entity can be related to instances of another entity:
+
+- **1:1 (One-to-One)**: Each instance of Entity A relates to at most one instance of Entity B, and vice versa
+- **1:M (One-to-Many)**: Each instance of Entity A can relate to multiple instances of Entity B, but each instance of Entity B relates to at most one instance of Entity A
+- **M:N (Many-to-Many)**: Each instance of Entity A can relate to multiple instances of Entity B, and each instance of Entity B can relate to multiple instances of Entity A
+
+**Participation Constraints** indicate whether entity participation in relationships is mandatory (total) or optional (partial):
+- **Total Participation**: Every instance of the entity must participate in the relationship
+- **Partial Participation**: Some instances of the entity may not participate in the relationship
+
+These conceptual cardinalities will be implemented in the logical model through foreign key constraints, intermediate tables for M:N relationships, and referential integrity rules.
+
+| Relationship | Cardinality | Participation | Relationship Attributes | Business Rule |
+|--------------|-------------|---------------|------------------------|---------------|
+| Customer places Order | 1:M | Customer = partial, Order = total | | Every order must belong to a customer; customers may exist without orders |
+| Order contains Product | M:N | Both partial | Quantity, UnitPriceAtOrder | Resolved through OrderItem weak entity |
+| Product belongs to Category | M:1 | Product = partial, Category = partial | | Products may be uncategorized; categories may be empty |
+| Category has subcategories | 1:M | Both partial | | Hierarchical structure; prevents cycles |
+| Order has Payment | 1:M | Order = partial, Payment = total | Amount, PaidAt, Status | Orders can exist before payment; every payment belongs to an order |
+| Customer opens SupportTicket | 1:M | Customer = partial, Ticket = total | | Every ticket belongs to a customer; customers may never open tickets |
+| SupportTicket relates to Order | M:1 | Both partial | | Tickets may reference specific orders for context |
+| SupportTicket assigned to Employee | M:1 | Both partial | | Tickets may be unassigned; employees may have no tickets |
+| Employee reports to Employee | 1:M | Both partial | | Management hierarchy; not all employees are managers |
+| Product has specialized attributes | 1:1 | Product = total, Subtype = total | | Each product belongs to exactly one subtype |
+
 ### 3.4 Constraints and Business Rules (conceptual level)
+
+This section defines the conceptual constraints and business rules that govern the data model at the conceptual level. These constraints ensure data integrity and enforce business logic before implementation in the logical model.
+
+#### **Entity Constraints**
+- **Uniqueness Constraints**: Each entity must have a unique identifier (CustomerID, ProductID, OrderID, etc.)
+- **Existence Constraints**: Certain entities cannot exist without their parent entities (OrderItem requires Order)
+- **Type Constraints**: Products must belong to exactly one subtype (Electronics, Clothing, or Books)
+
+#### **Relationship Constraints**
+- **Referential Integrity**: Every foreign key must reference a valid primary key
+- **Cardinality Constraints**: Relationships must respect their defined cardinalities
+- **Participation Constraints**: Total participation entities must always participate in their relationships
+- **Disjointness Constraints**: Subtype entities are mutually exclusive (a product cannot be both Electronics and Clothing)
+
+#### **Domain Constraints**
+- **Value Constraints**: Status fields must use predefined values (Active, Inactive, Pending, etc.)
+- **Range Constraints**: Quantities must be positive, prices must be non-negative
+- **Format Constraints**: Email addresses must follow valid email format, phone numbers must be valid
+
+#### **Business Rules**
+- **Registration Requirement**: Customers must register before placing orders (no guest checkout)
+- **Order Content**: Every order must contain at least one product
+- **Payment Association**: Every payment must be associated with an order
+- **Support Ticket Ownership**: Every support ticket must be associated with a customer
+- **Product Type Consistency**: Product subtype attributes must match the product's assigned type
+- **Hierarchical Integrity**: Category hierarchies cannot contain circular references
+- **Employee Management**: Employee reporting relationships cannot create cycles
+
+#### **Temporal Constraints**
+- **Order Lifecycle**: Orders progress through defined states (Pending → Processing → Shipped → Delivered)
+- **Payment Processing**: Payments can be processed after order creation
+- **Support Ticket Lifecycle**: Tickets progress through defined states (Open → In Progress → Resolved → Closed)
+
+These conceptual constraints will be implemented in the logical model through primary key constraints, foreign key constraints, check constraints, and application-level business logic validation.
 
 ### 3.5 Advanced Data Modelling Features
 
@@ -683,6 +742,9 @@ This section provides the detailed technical specifications for each entity, inc
 | SupportTicket refers to Order            | 0..* ⟶ 0..1              | Both partial                                          |                                          | A ticket may or may not be linked to an order                              |
 | SupportTicket assigned to Employee       | 0..* ⟶ 0..1              | Both partial                                          |                                          | Tickets may be unassigned; some employees may have none                    |
 | Employee reports to Employee (recursive) | 0..1 ⟶ 0..*              | Both partial                                          |                                          | Models reporting lines; not all employees are managers                     |
+| Product has Electronics attributes        | 1 ⟶ 0..1                 | Product = partial, Electronics = total                | Brand, Model, WarrantyPeriod, Specifications | Electronics subtype for electronic products only                           |
+| Product has Clothing attributes           | 1 ⟶ 0..1                 | Product = partial, Clothing = total                   | Size, Color, Material, CareInstructions     | Clothing subtype for apparel products only                                 |
+| Product has Books attributes              | 1 ⟶ 0..1                 | Product = partial, Books = total                      | Author, ISBN, Pages, Publisher              | Books subtype for publication products only                                |
 
 ### 4.3 Normalization and Justification (1NF → 3NF or BCNF if applicable)
 
