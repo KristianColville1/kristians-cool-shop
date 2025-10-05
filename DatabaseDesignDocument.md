@@ -1,5 +1,7 @@
 # Database Design Document
 
+![DatabaseImage](docs/images/database-storage.png)
+
 **Kristian Colville**
 **W20114790**
 **Databases**
@@ -288,9 +290,14 @@ The ER model also naturally supports the advanced concepts required by the assig
 
 ## Acronyms and Abbreviations
 
-| Acronym / Abbreviation | Meaning                  |
-| ---------------------- | ------------------------ |
-| DDD                    | Database Design Document |
+| Acronym / Abbreviation | Meaning                     |
+| ---------------------- | --------------------------- |
+| DDD                    | Database Design Document    |
+| ER                     | Entity-Relationship         |
+| ERD                    | Entity-Relationship Diagram |
+| PK                     | Primary Key                 |
+| FK                     | Foreign Key                 |
+| SKU                    | Stock Keeping Unit          |
 
 ## Appendices
 
