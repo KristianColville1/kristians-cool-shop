@@ -18,7 +18,6 @@
   - [1.2 Scope of activities](#12-scope-of-activities)
   - [1.3 Intended Audience](#13-intended-audience)
   - [1.4 Methodology](#14-methodology)
-  - [1.5 Security and Privacy Considerations](#15-security-and-privacy-considerations)
 - [2. System Description](#2-system-description)
   - [2.1 Problem Domain and Contextual Background](#21-problem-domain-and-contextual-background)
   - [2.2 Stakeholders and User Requirements](#22-stakeholders-and-user-requirements)
@@ -69,8 +68,8 @@
 | 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation. |
 | 05-10-2025 | 0.4.6   | Document Owner | Added subtype/supertype pattern for products and edited sections 2 to 4.                                                  |
 | 05-10-2025 | 0.5     | Document Owner | Edited section 4 and added data from research and the problem domain for normalisation.                                   |
-|            |         |                |                                                                                                                           |
-|            |         |                |                                                                                                                           |
+| 11-10-2025 | 0.6     | Document Owner | Removed security considerations from introduction section.                                                                |
+| 11-10-2025 | 0.7     | Document Owner | Added conceptual er diagram and added multivalued attribute skill for employee entity.                                    |
 
 ## 1. Purpose
 
@@ -109,21 +108,11 @@ This document is intended for the following audiences:
 
 ### 1.4 Methodology
 
-The development of this DDD was a step-by-step process, guided by research and careful planning. It began with a simple table of contents, which served as a roadmap and helped organize the work in a logical sequence. Along the way, similar documents and supporting materials were reviewed to understand common practices and ensure the final version met professional standards.
+The development of this DDD was a gradual, step-by-step process that relied on research and careful planning. It began with a simple table of contents that acted as a roadmap, helping to organise the work in a clear and logical order. Throughout the process, I looked at similar documents and reference materials to understand common approaches and to make sure the final version met professional standards.
 
-The document was built up in stages. Early drafts covered broad, general details typical of projects like this. These were then refined and adapted to fit the specific problem domain chosen for the module. As the work progressed, database design methods came into play—especially the creation and refinement of Entity Relationship Diagrams—to make sure the design aligned with the requirements.
+The document came together in stages. Early drafts focused on broad ideas and general details that are typical for projects like this. These were later refined and shaped around the specific problem area chosen for the module. As the work moved forward, I started applying database design methods, such as creating and updating Entity Relationship Diagrams, to make sure the design matched the requirements.
 
-A revision history was maintained throughout to track changes and improvements as the document evolved. The whole drafting process was managed against the planned schedule, with the goal of not only fulfilling the document's purpose but also showing how database design techniques can be applied in practice.
-
-### 1.5 Security and Privacy Considerations
-
-When designing relational databases, security and privacy should be considered alongside structure and relationships. A few key points are:
-
-1. **Access control** – Different users should have different permissions. For example, an administrator might have full rights to create, update, and delete tables, while a standard user may only need specific access to certain views. Good use of roles and privileges prevents unnecessary exposure of data.
-2. **Data protection** – Sensitive attributes (such as names, addresses, or payment details) should be identified during the design stage and, where possible, separated into their own entities. This makes it easier to apply stricter controls or encryption to those specific tables without affecting the whole schema.
-3. **Good practices** – Avoid storing plain text credentials, never embed passwords in the design itself, and ensure relationships between entities are designed with the principle of least privilege in mind. (And yes, using password123 would break every best practice—and probably a few hearts along the way.)
-
-Although this project is a learning exercise, it highlights how security and privacy need to be considered at the design level, not added later. In relational systems, how entities connect is just as important for protecting data as it is for modelling it.
+A revision history was kept to record updates and improvements as the document developed. The drafting process was managed alongside the project timeline, with the goal of not only meeting the document’s requirements but also showing how database design techniques can be used in practice.
 
 ## 2. System Description
 
@@ -155,11 +144,11 @@ The new database design must support a modern e-commerce platform capable of han
 - Customer support ticket management
 
 **Migration Objectives:**
-The database redesign focuses on creating a scalable, normalized structure that can support current operations while providing a foundation for future growth. The new design will implement proper entity relationships, data integrity constraints, and optimized data structures to address the performance and scalability issues of the current system.
+The database redesign aims to create a scalable and normalised structure that supports current operations while providing a solid foundation for future growth. The new design introduces well-defined entity relationships, data integrity constraints, and optimised data structures to address the performance and scalability limitations of the existing system.
 
 ### 2.2 Stakeholders and User Requirements
 
-Several stakeholder groups interact with the system, each with distinct requirements:
+Several key stakeholder groups interact with the system, each with their own specific requirements:
 
 - **Customers**
 
@@ -209,6 +198,7 @@ This section identifies the primary business entities that the system must manag
 | **Payment**       | Financial transactions                                   | Records of how orders were paid                      |
 | **SupportTicket** | Customer service interactions                            | Issues and requests from customers                   |
 | **Employee**      | Staff members                                            | People who manage the system and provide support     |
+| **Skill**         | Employee competencies and capabilities                   | Standardised skills that employees possess           |
 
 ### 2.4 Relationships Among Objects
 
@@ -218,14 +208,14 @@ This section describes the key business relationships between entities, focusing
 | ---------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
 | Customer places Order              | Customers can make purchases                    | Every order must be associated with a customer                                |
 | Order contains Products            | Orders can include multiple products            | Orders track which products were purchased and in what quantities             |
-| Product belongs to Category        | Products can be organized into categories       | Products may be categorized to help customers find items                      |
-| Product has specialized attributes | Products can have type-specific details         | Products must belong to exactly one subtype (Electronics, Clothing, or Books) |
-| Category has subcategories         | Categories can be organized hierarchically      | Categories can have parent-child relationships for better organization        |
+| Product belongs to Category        | Products can be organised into categories       | Products may be categorised to help customers find items                      |
+| Product has specialised attributes | Products can have type-specific details         | Products must belong to exactly one subtype (Electronics, Clothing, or Books) |
+| Category has subcategories         | Categories can be organised hierarchically      | Categories can have parent-child relationships for better organisation        |
 | Order has Payment                  | Orders must be paid for                         | Orders can have associated payment records                                    |
 | Customer opens SupportTicket       | Customers can request help                      | Support tickets are always linked to a customer                               |
 | SupportTicket relates to Order     | Support issues may be about specific orders     | Support tickets can optionally reference specific orders                      |
 | Employee handles SupportTicket     | Staff members can be assigned to resolve issues | Support tickets can be assigned to employees for resolution                   |
-| Employee reports to Employee       | Staff have management relationships             | Employees can have supervisors in the organizational structure                |
+| Employee reports to Employee       | Staff have management relationships             | Employees can have supervisors in the organisational structure                |
 
 ### 2.5 Functional Requirements (Transactions, Operations, Queries)
 
@@ -279,23 +269,32 @@ The model incorporates several advanced database concepts to handle the real-wor
 
 ### 3.1 Rationale for Chosen Modelling Approach
 
-The Entity-Relationship (ER) modelling approach was selected for developing the conceptual data model of Kristian's Cool Shop. This choice was made after considering several alternative modelling approaches.
+The Unified Modelling Language (UML) class diagram approach was selected for developing the conceptual data model of Kristian's Cool Shop. This choice was made after initially exploring traditional Entity-Relationship (ER) diagram notations and evaluating their suitability for this project.
 
-**Why ER Modelling is Appropriate:**
+**Exploration of Modelling Approaches:**
 
-ER modelling excels at representing complex relationships between distinct business entities, making it ideal for this e-commerce system with multiple interconnected entities (customers, products, orders, payments). As noted by GeeksforGeeks, "ER diagrams represent the E-R model in a database, making them easy to convert into relations (tables)" (GeeksforGeeks, 2025), which aligns perfectly with our SQL-based implementation target.
+During the initial design phase, both traditional ER diagrams (Chen notation) and UML class diagrams were considered. Research into the differences between these approaches, particularly from [GeeksforGeeks&#39; comparison of UML and ER diagrams](https://www.geeksforgeeks.org/dbms/difference-between-uml-and-er-diagram/), highlighted key distinctions: "UML is a general modelling language which is used to visualise the design of a software system" whilst "ER Diagram is a pictorial representation of the real-world entities and their relationships with each other" (GeeksforGeeks, 2025).
 
-**Alternative Approaches Considered:**
+After creating initial diagrams using both notations, UML class diagrams were preferred based on guidance from the database module course lectures, which demonstrated UML's effectiveness for database design. The standardised notation and comprehensive support for advanced database concepts made UML the more suitable choice for this project.
 
-- **Object-Oriented Modelling**: Overkill for this relational database project and doesn't align with SQL implementation.
-- **UML Class Diagrams**: More suited for software design rather than database design, adding unnecessary complexity.
-- **Relational Model**: Starting directly with tables would skip the important conceptual phase.
+**Why UML Class Diagrams Are Appropriate:**
 
-**Specific Benefits for This Project:**
+UML class diagrams provide a standardised notation that effectively represents entities (as classes), attributes, and relationships (as associations). The notation supports the advanced database concepts required for this e-commerce system, including weak entities (via composition), recursive relationships (self-associations), and subtype/supertype structures (inheritance hierarchies).
 
-The ER approach directly addresses the scaling issues mentioned in the problem domain. By clearly modelling entities and relationships first, we can identify potential bottlenecks (like the many-to-many relationship between orders and products) and design appropriate solutions (the OrderItem weak entity) before implementation. This upfront modelling prevents the "clunky monolithic setup" problems that led to the current system's performance issues.
+**Tool Selection: Visual Paradigm**
 
-The ER model also naturally supports the advanced concepts required by the assignment - weak entities for order line items, recursive relationships for category hierarchies and employee management structures, and subtype/supertype relationships for different payment methods.
+Visual Paradigm was chosen as the modelling tool due to its comprehensive UML 2.x support, database-specific extensions for entity relationship modelling, and ability to generate SQL DDL statements directly from diagrams. The tool is widely used in academic contexts and provides clear, professional diagram outputs suitable for documentation.
+
+**Key Benefits for This Project:**
+
+UML class diagrams address the specific requirements of this database design:
+
+- **Weak Entities**: OrderItem is represented through composition relationships (filled diamond notation)
+- **Recursive Relationships**: Self-associations with clear role names for Category hierarchy and Employee management
+- **Subtype/Supertype Structures**: Generalisation/specialisation hierarchies for Product subtypes (Electronics, Clothing, Books)
+- **Multiplicity Constraints**: Precise cardinality notation (1, 0..1, 1..*, 0..*) for relationship participation
+
+This approach provides a clear conceptual model that transitions effectively to the logical and physical implementation phases whilst maintaining consistency with modern database design practices.
 
 ### 3.2 Entity Definitions and Attributes
 
@@ -313,6 +312,18 @@ This section provides conceptual definitions of each entity in the data model, f
 - Customer information is required for order processing and support
 - Customers can have multiple orders over time
 
+**Conceptual Attributes**:
+
+The following attributes are required to support the business operations identified in the system requirements:
+
+- **CustomerID**: Unique identifier needed to distinguish between different customer accounts and maintain referential integrity across orders and support tickets.
+- **Email**: Essential for customer authentication, account management, and communication regarding orders and account status.
+- **FullName**: Required to personally identify customers for order processing, delivery, and customer service interactions.
+- **Phone**: Optional contact information that enables customer support staff to reach customers regarding order issues or account matters.
+- **Address**: Composite attribute representing the customer's delivery location, consisting of street address, city, postal code, and country. Required for order fulfilment and shipping.
+- **CreatedAt**: Timestamp recording when the customer account was established, supporting audit trails and customer lifecycle analysis.
+- **Status**: Indicates the current state of the customer account (Active, Suspended, Inactive), enabling the system to control access and manage account lifecycle.
+
 </details>
 
 <details>
@@ -329,6 +340,19 @@ This section provides conceptual definitions of each entity in the data model, f
 - Every product must belong to exactly one subtype (Electronics, Clothing, or Books)
 - Common attributes are stored in the supertype, specialized attributes in subtypes
 
+**Conceptual Attributes**:
+
+The following attributes are required to support product management and sales operations:
+
+- **ProductID**: Unique system identifier for each product, enabling referential integrity with orders and categories.
+- **SKU**: Stock Keeping Unit, a unique business identifier used for inventory management and tracking.
+- **Name**: The product name as displayed to customers, essential for browsing and searching.
+- **Description**: Detailed product information helping customers make informed purchasing decisions.
+- **UnitPrice**: The current selling price of the product, required for order processing and revenue calculation.
+- **StockQty**: Current inventory quantity, enabling stock management and preventing overselling.
+- **Status**: Indicates product availability (Active, Discontinued, Out of Stock), controlling whether products can be ordered.
+- **ProductType**: Discriminator attribute identifying which subtype (Electronics, Clothing, Books) the product belongs to, ensuring proper specialisation.
+
 </details>
 
 <details>
@@ -342,6 +366,16 @@ This section provides conceptual definitions of each entity in the data model, f
 - Dependent on the Product supertype for core product information
 - Attributes are only applicable to products classified as electronics
 - Supports detailed product specifications for technical items
+
+**Conceptual Attributes**:
+
+Specialised attributes for electronic products:
+
+- **ProductID**: Links to the parent Product entity, serving as both primary key and foreign key to maintain the generalisation relationship.
+- **Brand**: The manufacturer or brand name, important for customer purchasing decisions and product categorisation.
+- **Model**: Specific model number or name, distinguishing between variants from the same manufacturer.
+- **WarrantyPeriod**: Duration of warranty coverage in months, essential for customer assurance and after-sales support.
+- **Specifications**: Technical details such as processor speed, memory, screen size, etc., helping customers evaluate technical products.
 
 </details>
 
@@ -357,6 +391,16 @@ This section provides conceptual definitions of each entity in the data model, f
 - Attributes are only applicable to products classified as clothing
 - Supports detailed product specifications for fashion items
 
+**Conceptual Attributes**:
+
+Specialised attributes for clothing products:
+
+- **ProductID**: Links to the parent Product entity, serving as both primary key and foreign key to maintain the generalisation relationship.
+- **Size**: The garment size (S, M, L, XL, etc.), essential for customers to select properly fitting items.
+- **Color**: The primary colour of the clothing item, important for customer preference and visual identification.
+- **Material**: Fabric composition (cotton, polyester, wool, etc.), helping customers with material preferences and care requirements.
+- **CareInstructions**: Washing and maintenance guidelines, ensuring customers can properly care for their garments.
+
 </details>
 
 <details>
@@ -370,6 +414,16 @@ This section provides conceptual definitions of each entity in the data model, f
 - Dependent on the Product supertype for core product information
 - Attributes are only applicable to products classified as books
 - Supports detailed product specifications for literary items
+
+**Conceptual Attributes**:
+
+Specialised attributes for book products:
+
+- **ProductID**: Links to the parent Product entity, serving as both primary key and foreign key to maintain the generalisation relationship.
+- **Author**: The book's author name, crucial for customer searches and literary categorisation.
+- **ISBN**: International Standard Book Number, a unique identifier for the publication used in the book industry.
+- **Pages**: Total page count, giving customers an indication of the book's length.
+- **Publisher**: The publishing company, relevant for customers and industry cataloguing.
 
 </details>
 
@@ -385,6 +439,14 @@ This section provides conceptual definitions of each entity in the data model, f
 - The category structure supports flexible product organization
 - Categories help customers browse and filter products
 
+**Conceptual Attributes**:
+
+The following attributes support the hierarchical product organisation system:
+
+- **CategoryID**: Unique identifier for each category, enabling referential integrity with products and parent categories.
+- **Name**: The category name displayed to customers, used for navigation and browsing.
+- **ParentCategoryID**: Reference to another category, enabling hierarchical organisation (e.g., Electronics > Laptops > Gaming Laptops). This recursive relationship allows unlimited levels of categorisation.
+
 </details>
 
 <details>
@@ -398,6 +460,16 @@ This section provides conceptual definitions of each entity in the data model, f
 - Orders represent the business transaction, not just a shopping cart
 - Orders have a lifecycle from creation to completion
 - Orders can contain multiple products with different quantities
+
+**Conceptual Attributes**:
+
+The following attributes support order processing and tracking:
+
+- **OrderID**: Unique identifier for each order, serving as the primary key and enabling tracking throughout the order lifecycle.
+- **OrderDate**: Timestamp recording when the order was placed, essential for order tracking, reporting, and customer service.
+- **Status**: Indicates the current stage in the order lifecycle (Pending, Processing, Shipped, Delivered, Cancelled), enabling process tracking and customer communication.
+- **TotalAmount**: The total monetary value of the order, calculated from all order items, required for payment processing and financial reporting.
+- **CustomerID**: Reference to the customer who placed the order, establishing the mandatory relationship between orders and customers.
 
 </details>
 
@@ -413,6 +485,17 @@ This section provides conceptual definitions of each entity in the data model, f
 - OrderItems preserve historical pricing information
 - OrderItems resolve the many-to-many relationship between orders and products
 
+**Conceptual Attributes**:
+
+The following attributes capture line-level order details:
+
+- **OrderID**: Part of the composite primary key and foreign key to the parent Order, establishing the existence dependency that makes this a weak entity.
+- **LineNo**: Sequential line number within the order, forming the discriminator (partial key) that uniquely identifies items within a specific order.
+- **ProductID**: Reference to the product being purchased, linking the order item to the product catalogue.
+- **Quantity**: Number of units of this product in the order, required for inventory management and fulfilment.
+- **UnitPriceAtOrder**: The price per unit at the time the order was placed, preserving historical pricing information even if current product prices change.
+- **LineSubtotal**: Calculated value (Quantity × UnitPriceAtOrder), representing the total cost for this line item.
+
 </details>
 
 <details>
@@ -426,6 +509,17 @@ This section provides conceptual definitions of each entity in the data model, f
 - Payments can be processed after order creation
 - Different payment methods may have different characteristics
 - Payment records support financial reconciliation and reporting
+
+**Conceptual Attributes**:
+
+The following attributes track payment transactions:
+
+- **PaymentID**: Unique identifier for each payment transaction, serving as the primary key.
+- **OrderID**: Reference to the order being paid, establishing the mandatory relationship between payments and orders.
+- **Amount**: The monetary value of the payment, required for financial tracking and reconciliation.
+- **PaidAt**: Timestamp recording when the payment was processed, essential for financial reporting and order fulfilment triggers.
+- **Status**: Indicates the payment state (Pending, Completed, Failed, Refunded), tracking the payment lifecycle and enabling appropriate business actions.
+- **MethodType**: Indicates the payment method category (Card, PayPal, Bank Transfer), supporting different payment processing workflows.
 
 </details>
 
@@ -441,6 +535,19 @@ This section provides conceptual definitions of each entity in the data model, f
 - Support tickets can be assigned to employees for resolution
 - Support tickets have a lifecycle from creation to resolution
 
+**Conceptual Attributes**:
+
+The following attributes manage customer support interactions:
+
+- **TicketID**: Unique identifier for each support ticket, serving as the primary key and reference number.
+- **OpenedAt**: Timestamp recording when the ticket was created, tracking response times and service level agreements.
+- **Status**: Indicates the ticket's state (Open, In Progress, Resolved, Closed), managing the support workflow and tracking resolution progress.
+- **Priority**: Indicates urgency level (Low, Medium, High, Critical), enabling appropriate resource allocation and response prioritisation.
+- **CustomerID**: Reference to the customer who opened the ticket, establishing the mandatory relationship.
+- **OrderID**: Optional reference to a related order, providing context when issues concern specific purchases.
+- **AssignedTo**: Reference to the employee handling the ticket, enabling workload management and accountability.
+- **Subject**: Brief description of the issue, providing quick identification and categorisation.
+
 </details>
 
 <details>
@@ -455,35 +562,79 @@ This section provides conceptual definitions of each entity in the data model, f
 - Employees have different roles and responsibilities
 - Employee information supports workload management and escalation
 
+**Conceptual Attributes**:
+
+The following attributes support employee management and operations:
+
+- **EmployeeID**: Unique identifier for each employee, serving as the primary key and enabling referential integrity across ticket assignments and management hierarchies.
+- **FullName**: The employee's complete name, used for identification and communication.
+- **Email**: Work email address for system access and business communication, must be unique for authentication purposes.
+- **PPSN**: Personal Public Service Number, the Irish national identifier required for payroll, tax, and social welfare purposes. Unique to each employee.
+- **Phone**: Contact telephone number for internal communication and emergency contact.
+- **Role**: The employee's job function (Administrator, Support Agent, Manager), determining system permissions and responsibilities.
+- **HireDate**: Date when the employee joined the organisation, supporting tenure tracking and HR reporting.
+- **ManagerID**: Reference to another employee who serves as this employee's supervisor, establishing the management hierarchy through a recursive relationship.
+- **Skills** (Multivalued): A collection of skills possessed by the employee (e.g., 'Customer Service', 'Technical Support', 'SQL', 'Python', 'Management'). This multivalued attribute enables skill-based ticket assignment and workforce capability tracking. Each employee can have multiple skills.
+
+</details>
+
+<details>
+<summary><strong>Skill Entity</strong></summary>
+
+**Business Definition**: Represents specific competencies and capabilities that employees possess. Skills are managed as a separate entity to enable standardisation, prevent duplication, and support workforce planning.
+
+**Key Business Characteristics**:
+
+- Skills exist independently and can be shared by multiple employees
+- Standardised skill names ensure consistency in skill tracking
+- Skills support workforce capability analysis and skill-based task assignment
+- The many-to-many relationship between Employee and Skill is resolved through the EmployeeSkill associative entity
+
+**Conceptual Attributes**:
+
+The following attributes define organisational skills:
+
+- **SkillID**: Unique identifier for each skill, serving as the primary key.
+- **Name**: The name of the skill (e.g., 'Customer Service', 'SQL', 'Python', 'Management'), must be unique to prevent duplicate skill entries.
+- **Category**: Optional categorisation of skills (e.g., 'Technical', 'Soft Skills', 'Management'), helping organise and group related skills.
+- **Description**: Optional detailed description of the skill, clarifying what the skill encompasses.
+
 </details>
 
 ### 3.3 Relationships and Cardinalities
 
-This section defines the conceptual relationships between entities and their cardinality constraints. Cardinality rules specify how many instances of one entity can be related to instances of another entity:
+This section defines the conceptual relationships between entities using UML class diagram notation. The cardinality constraints specify how many instances of one entity can be related to instances of another entity.
 
-- **1:1 (One-to-One)**: Each instance of Entity A relates to at most one instance of Entity B, and vice versa
-- **1:M (One-to-Many)**: Each instance of Entity A can relate to multiple instances of Entity B, but each instance of Entity B relates to at most one instance of Entity A
-- **M:N (Many-to-Many)**: Each instance of Entity A can relate to multiple instances of Entity B, and each instance of Entity B can relate to multiple instances of Entity A
+**UML Multiplicity Notation:**
+
+- **1** = Exactly one
+- **0..1** = Zero or one (optional)
+- **1..\*** = One or more (at least one)
+- **0..\*** = Zero or more (optional, many)
+- **\*** = Many (shorthand for 0..\*)
 
 **Participation Constraints** indicate whether entity participation in relationships is mandatory (total) or optional (partial):
 
 - **Total Participation**: Every instance of the entity must participate in the relationship
 - **Partial Participation**: Some instances of the entity may not participate in the relationship
 
-These conceptual cardinalities will be implemented in the logical model through foreign key constraints, intermediate tables for M:N relationships, and referential integrity rules.
+These conceptual relationships will be implemented in the logical model through foreign key constraints, intermediate tables for many-to-many relationships, composition for weak entities, and generalisation/specialisation for subtypes.
 
-| Relationship                       | Cardinality | Participation                         | Relationship Attributes    | Business Rule                                                             |
-| ---------------------------------- | ----------- | ------------------------------------- | -------------------------- | ------------------------------------------------------------------------- |
-| Customer places Order              | 1:M         | Customer = partial, Order = total     |                            | Every order must belong to a customer; customers may exist without orders |
-| Order contains Product             | M:N         | Both partial                          | Quantity, UnitPriceAtOrder | Resolved through OrderItem weak entity                                    |
-| Product belongs to Category        | M:1         | Product = partial, Category = partial |                            | Products may be uncategorized; categories may be empty                    |
-| Category has subcategories         | 1:M         | Both partial                          |                            | Hierarchical structure; prevents cycles                                   |
-| Order has Payment                  | 1:M         | Order = partial, Payment = total      | Amount, PaidAt, Status     | Orders can exist before payment; every payment belongs to an order        |
-| Customer opens SupportTicket       | 1:M         | Customer = partial, Ticket = total    |                            | Every ticket belongs to a customer; customers may never open tickets      |
-| SupportTicket relates to Order     | M:1         | Both partial                          |                            | Tickets may reference specific orders for context                         |
-| SupportTicket assigned to Employee | M:1         | Both partial                          |                            | Tickets may be unassigned; employees may have no tickets                  |
-| Employee reports to Employee       | 1:M         | Both partial                          |                            | Management hierarchy; not all employees are managers                      |
-| Product has specialized attributes | 1:1         | Product = total, Subtype = total      |                            | Each product belongs to exactly one subtype                               |
+| Relationship                             | Multiplicity  | Participation                          | Relationship Attributes      | Business Rule                                                                                                                  |
+| ---------------------------------------- | ------------- | -------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Customer places Order                    | 1 to 0..\*    | Customer = partial, Order = total      |                              | Every order belongs to a customer; customers may exist without orders                                                          |
+| Order contains Product (via OrderItem)   | M:N           | Both partial                           | Quantity, UnitPriceAtOrder   | Resolved through OrderItem weak entity (composition relationship)                                                              |
+| Product belongs to Category              | 0..1 to\*     | Product = partial, Category = partial  |                              | Products may be uncategorised; categories may be empty                                                                         |
+| Category has subcategories (recursive)   | 0..1 to 0..\* | Both partial                           |                              | Parent category can have multiple children; prevents circular references                                                       |
+| Order has Payment                        | 1 to 1..\*    | Order = partial, Payment = total       | Amount, PaidAt, Status       | Orders can exist before payment; every payment belongs to an order                                                             |
+| Customer opens SupportTicket             | 1 to 0..\*    | Customer = partial, Ticket = total     |                              | Every ticket belongs to a customer; customers may never open tickets                                                           |
+| SupportTicket refers to Order            | 0..1 to 0..\* | Both partial                           |                              | Tickets may optionally reference specific orders for context                                                                   |
+| SupportTicket assigned to Employee       | 0..1 to 0..\* | Both partial                           |                              | Tickets may be unassigned; employees may have no assigned tickets                                                              |
+| Employee reports to Employee (recursive) | 0..1 to 0..\* | Both partial                           |                              | Management hierarchy; not all employees have subordinates or managers                                                          |
+| Product specialises to Electronics       | 1 to 0..1     | Product = partial, Electronics = total | Brand, Model, WarrantyPeriod | Generalisation/specialisation relationship (inheritance)                                                                       |
+| Product specialises to Clothing          | 1 to 0..1     | Product = partial, Clothing = total    | Size, Colour, Material       | Generalisation/specialisation relationship (inheritance)                                                                       |
+| Product specialises to Books             | 1 to 0..1     | Product = partial, Books = total       | Author, ISBN, Publisher      | Generalisation/specialisation relationship (inheritance)                                                                       |
+| Employee has Skills (via EmployeeSkill)  | M:N           | Both partial                           |                              | Resolved through EmployeeSkill associative entity; employees can have multiple skills, skills can belong to multiple employees |
 
 ### 3.4 Constraints and Business Rules (conceptual level)
 
@@ -530,12 +681,14 @@ These conceptual constraints will be implemented in the logical model through pr
 
 The conceptual data model incorporates several advanced database modelling concepts to handle the complexity of the e-commerce system:
 
-- **Multivalued Attributes**: Attributes that can have multiple values for a single entity instance
-- **Recursive Relationships**: Self-referencing relationships that model hierarchical structures (Category parent-child relationships, Employee management hierarchy)
-- **Subtype/Supertype Structures**: The Product entity serves as a supertype with Electronics, Clothing, and Books as subtypes. This allows for shared common attributes (name, price, stock) while supporting specialized attributes (brand for electronics, size for clothing, author for books). The relationship enforces disjointness - each product belongs to exactly one subtype
-- **Weak Entities**: OrderItem is a weak entity that depends on its parent Order for existence and identity
+- **Multivalued Attributes**: The Employee entity includes a multivalued Skills attribute, allowing each employee to possess multiple skills (e.g., 'Customer Service', 'Technical Support', 'SQL', 'Python'). This enables skill-based ticket assignment and workforce capability tracking. In the logical model, this multivalued attribute is resolved into a separate EmployeeSkill table with a composite primary key (EmployeeID, Skill).
+- **Recursive Relationships**: Self-referencing relationships model hierarchical structures. The Category entity has a recursive relationship (ParentCategoryID) enabling multi-level product organisation (e.g., Electronics > Laptops > Gaming Laptops). The Employee entity has a recursive relationship (ManagerID) representing the management hierarchy where employees report to other employees.
+- **Subtype/Supertype Structures**: The Product entity serves as a supertype with Electronics, Clothing, and Books as subtypes. This allows shared common attributes (name, price, stock) while supporting specialised attributes (brand for electronics, size for clothing, author for books). The relationship enforces disjointness through the ProductType discriminator - each product belongs to exactly one subtype. This design maintains normalisation whilst providing flexibility for category-specific attributes.
+- **Weak Entities**: OrderItem is a weak entity that depends on its parent Order for existence and identity. It uses a composite primary key (OrderID, LineNo) where OrderID is also a foreign key to Order, and LineNo serves as the partial key (discriminator) uniquely identifying items within each order. OrderItem cannot exist without its parent Order, representing the composition relationship in the UML model.
 
 ### 3.6 Conceptual ER Diagram (annotated)
+
+![conceptual er diagram](./KristiansCoolShop.jpg)
 
 ## 4. Logical Data Model
 
@@ -763,28 +916,67 @@ This section provides the detailed technical specifications for each entity, inc
 | EmployeeID | INTEGER                                           | PRIMARY KEY, AUTO_INCREMENT                       | Unique identifier for each employee |
 | FullName   | VARCHAR(255)                                      | NOT NULL                                          | Employee's complete name            |
 | Email      | VARCHAR(255)                                      | UNIQUE, NOT NULL                                  | Work email address                  |
+| PPSN       | VARCHAR(12)                                       | UNIQUE, NOT NULL                                  | Personal Public Service Number      |
+| Phone      | VARCHAR(20)                                       | NULL                                              | Contact telephone number            |
 | Role       | ENUM('Administrator', 'Support Agent', 'Manager') | NOT NULL                                          | Job function                        |
+| HireDate   | DATE                                              | NOT NULL                                          | Date employee joined organisation   |
 | ManagerID  | INTEGER                                           | NULL, FOREIGN KEY REFERENCES Employee(EmployeeID) | Reference to direct supervisor      |
+
+</details>
+
+<details>
+<summary><strong>Skill Table</strong></summary>
+
+This table stores standardised skills that employees can possess, supporting workforce capability tracking and skill-based task assignment.
+
+| Attribute   | Data Type    | Constraints                 | Description                             |
+| ----------- | ------------ | --------------------------- | --------------------------------------- |
+| SkillID     | INTEGER      | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for each skill        |
+| Name        | VARCHAR(100) | UNIQUE, NOT NULL            | Name of the skill                       |
+| Category    | VARCHAR(50)  | NULL                        | Category (Technical, Soft Skills, etc.) |
+| Description | TEXT         | NULL                        | Detailed description of the skill       |
+
+</details>
+
+<details>
+<summary><strong>EmployeeSkill Table (Associative Entity)</strong></summary>
+
+This associative entity resolves the many-to-many relationship between Employee and Skill, representing the multivalued Skills attribute from the conceptual model.
+
+| Attribute  | Data Type | Constraints                                              | Description           |
+| ---------- | --------- | -------------------------------------------------------- | --------------------- |
+| EmployeeID | INTEGER   | PRIMARY KEY, FOREIGN KEY REFERENCES Employee(EmployeeID) | Reference to employee |
+| SkillID    | INTEGER   | PRIMARY KEY, FOREIGN KEY REFERENCES Skill(SkillID)       | Reference to skill    |
+
+**Composite Primary Key**: (EmployeeID, SkillID)
+
+This design ensures each employee-skill combination is unique and allows queries such as:
+
+- Finding all skills for a given employee
+- Finding all employees with a specific skill
+- Skill-based ticket assignment and workforce planning
+- Standardised skill names across the organisation
 
 </details>
 
 <details>
 <summary><strong>Relationship Specifications with Cardinalities</strong></summary>
 
-| Relationship                             | Cardinality               | Participation                                         | Attributes                                   | Rationale                                                                  |
-| ---------------------------------------- | ------------------------- | ----------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------- |
-| Customer places Order                    | 1 ⟶ 0..*                 | Customer = partial, Order = total                     |                                              | Every order must belong to a customer; not every customer places an order  |
-| Order contains Product (via OrderItem)   | M:N resolved by OrderItem | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder, LineSubtotal     | OrderItem depends on Order; records product quantities at time of purchase |
-| Product belongs to Category              | Many ⟶ 0..1              | Product = partial, Category = partial                 |                                              | Products may or may not be categorised; categories may be empty            |
-| Category parent-of Category (recursive)  | 0..1 ⟶ 0..*              | Parent = partial, Child = partial                     |                                              | Supports multi-level catalogue; prevents cycles                            |
-| Order paid by Payment                    | 1 ⟶ 1..*                 | Order = partial, Payment = total                      | Amount, PaidAt, Status                       | Orders can exist before payment; every payment must belong to an order     |
-| SupportTicket opened by Customer         | 0..* ⟶ 1                 | Customer = partial, Ticket = total                    |                                              | Every ticket must belong to a customer; some customers never open tickets  |
-| SupportTicket refers to Order            | 0..* ⟶ 0..1              | Both partial                                          |                                              | A ticket may or may not be linked to an order                              |
-| SupportTicket assigned to Employee       | 0..* ⟶ 0..1              | Both partial                                          |                                              | Tickets may be unassigned; some employees may have none                    |
-| Employee reports to Employee (recursive) | 0..1 ⟶ 0..*              | Both partial                                          |                                              | Models reporting lines; not all employees are managers                     |
-| Product has Electronics attributes       | 1 ⟶ 0..1                 | Product = partial, Electronics = total                | Brand, Model, WarrantyPeriod, Specifications | Electronics subtype for electronic products only                           |
-| Product has Clothing attributes          | 1 ⟶ 0..1                 | Product = partial, Clothing = total                   | Size, Colour, Material, CareInstructions     | Clothing subtype for apparel products only                                 |
-| Product has Books attributes             | 1 ⟶ 0..1                 | Product = partial, Books = total                      | Author, ISBN, Pages, Publisher               | Books subtype for publication products only                                |
+| Relationship                             | Cardinality                   | Participation                                         | Attributes                                   | Rationale                                                                                                      |
+| ---------------------------------------- | ----------------------------- | ----------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Customer places Order                    | 1 ⟶ 0..*                     | Customer = partial, Order = total                     |                                              | Every order must belong to a customer; not every customer places an order                                      |
+| Order contains Product (via OrderItem)   | M:N resolved by OrderItem     | OrderItem = total, Order = partial, Product = partial | Quantity, UnitPriceAtOrder, LineSubtotal     | OrderItem depends on Order; records product quantities at time of purchase                                     |
+| Product belongs to Category              | Many ⟶ 0..1                  | Product = partial, Category = partial                 |                                              | Products may or may not be categorised; categories may be empty                                                |
+| Category parent-of Category (recursive)  | 0..1 ⟶ 0..*                  | Parent = partial, Child = partial                     |                                              | Supports multi-level catalogue; prevents cycles                                                                |
+| Order paid by Payment                    | 1 ⟶ 1..*                     | Order = partial, Payment = total                      | Amount, PaidAt, Status                       | Orders can exist before payment; every payment must belong to an order                                         |
+| SupportTicket opened by Customer         | 0..* ⟶ 1                     | Customer = partial, Ticket = total                    |                                              | Every ticket must belong to a customer; some customers never open tickets                                      |
+| SupportTicket refers to Order            | 0..* ⟶ 0..1                  | Both partial                                          |                                              | A ticket may or may not be linked to an order                                                                  |
+| SupportTicket assigned to Employee       | 0..* ⟶ 0..1                  | Both partial                                          |                                              | Tickets may be unassigned; some employees may have none                                                        |
+| Employee reports to Employee (recursive) | 0..1 ⟶ 0..*                  | Both partial                                          |                                              | Models reporting lines; not all employees are managers                                                         |
+| Product has Electronics attributes       | 1 ⟶ 0..1                     | Product = partial, Electronics = total                | Brand, Model, WarrantyPeriod, Specifications | Electronics subtype for electronic products only                                                               |
+| Product has Clothing attributes          | 1 ⟶ 0..1                     | Product = partial, Clothing = total                   | Size, Colour, Material, CareInstructions     | Clothing subtype for apparel products only                                                                     |
+| Product has Books attributes             | 1 ⟶ 0..1                     | Product = partial, Books = total                      | Author, ISBN, Pages, Publisher               | Books subtype for publication products only                                                                    |
+| Employee has Skills (via EmployeeSkill)  | M:N resolved by EmployeeSkill | Both partial                                          |                                              | Resolves multivalued Skills attribute; employees can have multiple skills, skills belong to multiple employees |
 
 </details>
 
