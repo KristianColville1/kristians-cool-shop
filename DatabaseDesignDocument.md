@@ -48,28 +48,31 @@
 
 ## Revision History
 
-| Date       | Version | Author         | Change/Note                                                                                                               |
-| ---------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 28-09-2025 | 0.1     | Document Owner | Initial draft, rough outline with table of contents. Prepping sections and overall information to be included.            |
-| 28-09-2025 | 0.1.1   | Document Owner | Defined purpose, edited and drafted section 1.                                                                            |
-| 01-10-2025 | 0.2     | Document Owner | Started Section 2, chose problem domain for assignment.                                                                   |
-| 01-10-2025 | 0.2.1   | Document Owner | Extracted database user requirements from the problem domain.                                                             |
-| 02-10-2025 | 0.2.2   | Document Owner | Created table for objects of interest and formatted.                                                                      |
-| 02-10-2025 | 0.2.3   | Document Owner | Started working on the relationships and formatting for table.                                                            |
-| 02-10-2025 | 0.2.4   | Document Owner | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again.           |
-| 02-10-2025 | 0.2.5   | Document Owner | Converted document to markdown file with libre office and set up github repo for project. I hate word.                    |
-| 02-10-2025 | 0.3     | Document Owner | Started working on drafting section 3 and figuring out what to do next.                                                   |
-| 05-10-2025 | 0.3.1   | Document Owner | Proofing document. Identified several formatting issues to fix.                                                           |
-| 05-10-2025 | 0.4     | Document Owner | Identified redundancy between sections 2 and 3 - detailed technical specs were repeated.                                  |
-| 05-10-2025 | 0.4.1   | Document Owner | Moved detailed entity attributes and cardinalities from Section 2 to Section 4 (Logical Data Model).                      |
-| 05-10-2025 | 0.4.2   | Document Owner | Rewrote Section 2.3 and 2.4 to be business-focused and conceptual only.                                                   |
-| 05-10-2025 | 0.4.3   | Document Owner | Updated Section 3.2 to provide proper conceptual entity definitions.                                                      |
-| 05-10-2025 | 0.4.4   | Document Owner | Created Section 4 (Logical Data Model) with all detailed technical specifications.                                        |
-| 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation. |
-| 05-10-2025 | 0.4.6   | Document Owner | Added subtype/supertype pattern for products and edited sections 2 to 4.                                                  |
-| 05-10-2025 | 0.5     | Document Owner | Edited section 4 and added data from research and the problem domain for normalisation.                                   |
-| 11-10-2025 | 0.6     | Document Owner | Removed security considerations from introduction section.                                                                |
-| 11-10-2025 | 0.7     | Document Owner | Added conceptual er diagram and added multivalued attribute skill for employee entity.                                    |
+| Date       | Version | Author         | Change/Note                                                                                                                                         |
+| ---------- | ------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 28-09-2025 | 0.1     | Document Owner | Initial draft, rough outline with table of contents. Prepping sections and overall information to be included.                                      |
+| 28-09-2025 | 0.1.1   | Document Owner | Defined purpose, edited and drafted section 1.                                                                                                      |
+| 01-10-2025 | 0.2     | Document Owner | Started Section 2, chose problem domain for assignment.                                                                                             |
+| 01-10-2025 | 0.2.1   | Document Owner | Extracted database user requirements from the problem domain.                                                                                       |
+| 02-10-2025 | 0.2.2   | Document Owner | Created table for objects of interest and formatted.                                                                                                |
+| 02-10-2025 | 0.2.3   | Document Owner | Started working on the relationships and formatting for table.                                                                                      |
+| 02-10-2025 | 0.2.4   | Document Owner | Prepared half of section 2 for proof reading and editing. Relationship participations to be checked over again.                                     |
+| 02-10-2025 | 0.2.5   | Document Owner | Converted document to markdown file with libre office and set up github repo for project. I hate word.                                              |
+| 02-10-2025 | 0.3     | Document Owner | Started working on drafting section 3 and figuring out what to do next.                                                                             |
+| 05-10-2025 | 0.3.1   | Document Owner | Proofing document. Identified several formatting issues to fix.                                                                                     |
+| 05-10-2025 | 0.4     | Document Owner | Identified redundancy between sections 2 and 3 - detailed technical specs were repeated.                                                            |
+| 05-10-2025 | 0.4.1   | Document Owner | Moved detailed entity attributes and cardinalities from Section 2 to Section 4 (Logical Data Model).                                                |
+| 05-10-2025 | 0.4.2   | Document Owner | Rewrote Section 2.3 and 2.4 to be business-focused and conceptual only.                                                                             |
+| 05-10-2025 | 0.4.3   | Document Owner | Updated Section 3.2 to provide proper conceptual entity definitions.                                                                                |
+| 05-10-2025 | 0.4.4   | Document Owner | Created Section 4 (Logical Data Model) with all detailed technical specifications.                                                                  |
+| 05-10-2025 | 0.4.5   | Document Owner | Document now follows proper DDD conventions with clear separation between business concepts and technical implementation.                           |
+| 05-10-2025 | 0.4.6   | Document Owner | Added subtype/supertype pattern for products and edited sections 2 to 4.                                                                            |
+| 05-10-2025 | 0.5     | Document Owner | Edited section 4 and added data from research and the problem domain for normalisation.                                                             |
+| 11-10-2025 | 0.6     | Document Owner | Removed security considerations from introduction section.                                                                                          |
+| 11-10-2025 | 0.7     | Document Owner | Added conceptual er diagram and added multivalued attribute skill for employee entity.                                                              |
+| 11-10-2025 | 0.8     | Document Owner | Formatted section 2.5 to highlight queries or transactions that the database should be able to handle or generate based on functional requirements. |
+|            |         |                |                                                                                                                                                     |
+|            |         |                |                                                                                                                                                     |
 
 ## 1. Purpose
 
@@ -221,19 +224,506 @@ This section describes the key business relationships between entities, focusing
 
 This section outlines the key functional requirements of Kristian's Cool Shop. These requirements describe the operations the database must support for different stakeholders, including customers, administrators, and support staff. They are expressed as typical transactions or queries that demonstrate how the database will be used in practice.
 
-| Requirement                       | Stakeholder       | Example Transaction / Query                                                                           |
-| --------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------- |
-| Place a new order                 | Customer          | Insert a new record into Order, with related OrderItem rows referencing selected Products.            |
-| View order history                | Customer          | `SELECT * FROM Order WHERE CustomerID = ? ORDER BY OrderDate DESC;`                                 |
-| Update stock levels               | Administrator     | `UPDATE Product SET StockQty = StockQty - ? WHERE ProductID = ?;`                                   |
-| Generate sales report             | Management        | `SELECT ProductID, SUM(Quantity) FROM OrderItem GROUP BY ProductID;`                                |
-| Manage product listings           | Administrator     | Insert, update, or delete rows in Product and assign them to a Category.                              |
-| Manage product subtypes           | Administrator     | Insert, update, or delete rows in Electronics, Clothing, or Books tables with appropriate attributes. |
-| Validate product type consistency | System            | Ensure Product.ProductType matches the corresponding subtype table (Electronics, Clothing, or Books). |
-| Record a payment                  | Customer / System | Insert into Payment (with subtype row in CardPayment or PayPalPayment) linked to an Order.            |
-| Track unresolved support tickets  | Support Agent     | `SELECT * FROM SupportTicket WHERE Status = 'Open' AND AssignedTo IS NULL;`                         |
-| Escalate a ticket                 | Support Agent     | Update SupportTicket with new EmployeeID (manager assignment).                                        |
-| Analyse staff workload            | Management        | Count how many SupportTickets are assigned to each Employee.                                          |
+#### 2.5.1 Creation Operations
+
+The database must support creation of new records across all entities:
+
+**Register new customer** (Customer)
+
+```sql
+INSERT INTO Customer (Email, FullName, Phone, Street, City, Postcode, Country, Status) 
+VALUES ('john@example.com', 'John Smith', '0871234567', '123 Main St', 'Dublin', 'D02 XY45', 'Ireland', 'Active');
+```
+
+**Add new product - Electronics** (Administrator)
+
+```sql
+-- Multi-step transaction to maintain referential integrity
+BEGIN TRANSACTION;
+
+INSERT INTO Product (SKU, Name, Description, UnitPrice, StockQty, Status, ProductType) 
+VALUES ('ELEC-LAP-001', 'Gaming Laptop Pro', 'High-performance gaming laptop', 1499.99, 25, 'Active', 'Electronics');
+
+INSERT INTO Electronics (ProductID, Brand, Model, WarrantyPeriod, Specifications) 
+VALUES (LAST_INSERT_ID(), 'TechBrand', 'GP-2024', 24, 'Intel i9, 32GB RAM, RTX 4080');
+
+COMMIT;
+```
+
+**Create product category** (Administrator)
+
+```sql
+-- Insert child category with parent reference
+INSERT INTO Category (Name, ParentCategoryID) 
+VALUES ('Gaming Laptops', 5); -- where 5 is the parent category 'Laptops'
+```
+
+**Place new order** (Customer)
+
+```sql
+-- Atomic transaction for order placement
+BEGIN TRANSACTION;
+
+-- Step 1: Create order
+INSERT INTO Order (CustomerID, OrderDate, Status, TotalAmount) 
+VALUES (42, CURRENT_TIMESTAMP, 'Pending', 0);
+
+SET @OrderID = LAST_INSERT_ID();
+
+-- Step 2: Add order items
+INSERT INTO OrderItem (OrderID, LineNo, ProductID, Quantity, UnitPriceAtOrder, LineSubtotal) 
+VALUES (@OrderID, 1, 101, 2, 49.99, 99.98);
+
+INSERT INTO OrderItem (OrderID, LineNo, ProductID, Quantity, UnitPriceAtOrder, LineSubtotal) 
+VALUES (@OrderID, 2, 203, 1, 149.99, 149.99);
+
+-- Step 3: Update order total
+UPDATE Order SET TotalAmount = 249.97 WHERE OrderID = @OrderID;
+
+-- Step 4: Update stock quantities
+UPDATE Product SET StockQty = StockQty - 2 WHERE ProductID = 101;
+UPDATE Product SET StockQty = StockQty - 1 WHERE ProductID = 203;
+
+COMMIT;
+```
+
+**Record payment** (System)
+
+```sql
+INSERT INTO Payment (OrderID, Amount, PaidAt, Status, MethodType) 
+VALUES (1234, 149.99, CURRENT_TIMESTAMP, 'Completed', 'Card');
+```
+
+**Open support ticket** (Customer)
+
+```sql
+INSERT INTO SupportTicket (CustomerID, OrderID, Subject, Priority, Status, OpenedAt) 
+VALUES (42, 1234, 'Damaged item received', 'High', 'Open', CURRENT_TIMESTAMP);
+```
+
+**Add employee skill** (Administrator)
+
+```sql
+-- Links employee to an existing skill
+INSERT INTO EmployeeSkill (EmployeeID, SkillID) 
+VALUES (10, 5);
+```
+
+**Create new skill** (Administrator)
+
+```sql
+INSERT INTO Skill (Name, Category, Description) 
+VALUES ('Python Programming', 'Technical', 'Proficiency in Python development and scripting');
+```
+
+#### 2.5.2 Deletion Operations
+
+The database must handle cascading deletions and referential integrity:
+
+**Delete customer account** (Administrator)
+
+```sql
+-- Cannot delete if customer has orders due to referential integrity
+-- Option 1: Soft delete (preferred)
+UPDATE Customer SET Status = 'Inactive' WHERE CustomerID = ?;
+
+-- Option 2: Hard delete only if no orders exist
+DELETE FROM Customer WHERE CustomerID = ? AND NOT EXISTS (
+    SELECT 1 FROM Order WHERE Order.CustomerID = Customer.CustomerID
+);
+```
+
+**Remove product from catalogue** (Administrator)
+
+```sql
+-- Soft delete preferred to preserve order history
+UPDATE Product SET Status = 'Discontinued' WHERE ProductID = ?;
+
+-- Historical orders still reference this product, maintaining data integrity
+```
+
+**Delete category** (Administrator)
+
+```sql
+-- Only allowed if no products reference the category
+DELETE FROM Category 
+WHERE CategoryID = ? 
+AND NOT EXISTS (
+    SELECT 1 FROM Product WHERE Product.CategoryID = Category.CategoryID
+);
+
+-- Alternative: Unlink products first
+UPDATE Product SET CategoryID = NULL WHERE CategoryID = ?;
+DELETE FROM Category WHERE CategoryID = ?;
+```
+
+**Cancel order** (Customer)
+
+```sql
+-- Soft delete with stock restoration
+BEGIN TRANSACTION;
+
+-- Restore stock for each item
+UPDATE Product p
+INNER JOIN OrderItem oi ON p.ProductID = oi.ProductID
+SET p.StockQty = p.StockQty + oi.Quantity
+WHERE oi.OrderID = ?;
+
+-- Mark order as cancelled
+UPDATE Order 
+SET Status = 'Cancelled' 
+WHERE OrderID = ? AND Status = 'Pending';
+
+COMMIT;
+```
+
+**Remove employee skill** (Administrator)
+
+```sql
+-- Removes association without deleting Employee or Skill entities
+DELETE FROM EmployeeSkill 
+WHERE EmployeeID = ? AND SkillID = ?;
+```
+
+**Close resolved ticket** (Support Agent)
+
+```sql
+-- Soft delete maintains support history
+UPDATE SupportTicket 
+SET Status = 'Closed' 
+WHERE TicketID = ? AND Status = 'Resolved';
+```
+
+**Delete obsolete skill** (Administrator)
+
+```sql
+-- Only possible if no employees currently possess this skill
+DELETE FROM Skill 
+WHERE SkillID = ? 
+AND NOT EXISTS (
+    SELECT 1 FROM EmployeeSkill WHERE EmployeeSkill.SkillID = Skill.SkillID
+);
+```
+
+#### 2.5.3 Filtering and Search Operations
+
+The database must support complex filtering for browsing and searching:
+
+**Search products by name** (Customer)
+
+```sql
+SELECT * FROM Product 
+WHERE Name LIKE '%laptop%' 
+AND Status = 'Active';
+```
+
+**Filter products by category** (Customer)
+
+```sql
+SELECT p.* 
+FROM Product p 
+WHERE p.CategoryID = ? 
+AND p.Status = 'Active' 
+AND p.StockQty > 0 
+ORDER BY p.Name;
+```
+
+**Filter electronics by brand** (Customer)
+
+```sql
+SELECT p.*, e.Brand, e.Model 
+FROM Product p 
+JOIN Electronics e ON p.ProductID = e.ProductID 
+WHERE e.Brand = 'Apple' 
+AND p.Status = 'Active';
+```
+
+**Find clothing by size and colour** (Customer)
+
+```sql
+SELECT p.*, c.Size, c.Color 
+FROM Product p 
+JOIN Clothing c ON p.ProductID = c.ProductID 
+WHERE c.Size = 'M' 
+AND c.Color = 'Blue';
+```
+
+**View active orders for customer** (Customer)
+
+```sql
+SELECT * FROM Order 
+WHERE CustomerID = ? 
+AND Status IN ('Pending', 'Processing', 'Shipped') 
+ORDER BY OrderDate DESC;
+```
+
+**Find tickets by priority** (Support Agent)
+
+```sql
+SELECT * FROM SupportTicket 
+WHERE Priority IN ('High', 'Critical') 
+AND Status != 'Closed' 
+ORDER BY OpenedAt ASC;
+```
+
+**Find employees by skill** (Administrator)
+
+```sql
+SELECT e.* 
+FROM Employee e 
+JOIN EmployeeSkill es ON e.EmployeeID = es.EmployeeID 
+JOIN Skill s ON es.SkillID = s.SkillID 
+WHERE s.Name = 'Customer Service';
+```
+
+**Search employees with multiple skills** (Administrator)
+
+```sql
+-- Find employees who have both 'SQL' and 'Python' skills
+SELECT e.* 
+FROM Employee e
+WHERE e.EmployeeID IN (
+    SELECT es.EmployeeID 
+    FROM EmployeeSkill es 
+    JOIN Skill s ON es.SkillID = s.SkillID 
+    WHERE s.Name = 'SQL'
+)
+AND e.EmployeeID IN (
+    SELECT es.EmployeeID 
+    FROM EmployeeSkill es 
+    JOIN Skill s ON es.SkillID = s.SkillID 
+    WHERE s.Name = 'Python'
+);
+```
+
+**Filter products by price range** (Customer)
+
+```sql
+SELECT * FROM Product 
+WHERE UnitPrice BETWEEN 50.00 AND 200.00 
+AND Status = 'Active' 
+ORDER BY UnitPrice ASC;
+```
+
+#### 2.5.4 Complex Transactions and Stacked Queries
+
+The database must support multi-step transactions and analytical queries:
+
+**Complete order placement (atomic transaction)** (Customer)
+```sql
+-- All steps must succeed or rollback to prevent data inconsistency
+-- (Shown earlier in 2.5.1)
+```
+
+**Generate sales report by category** (Management)
+```sql
+SELECT c.Name AS Category, 
+       COUNT(DISTINCT o.OrderID) AS Orders, 
+       SUM(oi.Quantity) AS UnitsSold, 
+       SUM(oi.LineSubtotal) AS Revenue 
+FROM Category c 
+JOIN Product p ON c.CategoryID = p.CategoryID 
+JOIN OrderItem oi ON p.ProductID = oi.ProductID 
+JOIN Order o ON oi.OrderID = o.OrderID 
+GROUP BY c.CategoryID, c.Name 
+ORDER BY Revenue DESC;
+```
+
+**Find customers who never ordered** (Management)
+```sql
+SELECT c.* 
+FROM Customer c 
+LEFT JOIN Order o ON c.CustomerID = o.CustomerID 
+WHERE o.OrderID IS NULL 
+AND c.Status = 'Active';
+```
+
+**Identify top spending customers** (Management)
+```sql
+SELECT c.CustomerID, 
+       c.FullName, 
+       c.Email, 
+       SUM(o.TotalAmount) AS TotalSpent 
+FROM Customer c 
+JOIN Order o ON c.CustomerID = o.CustomerID 
+WHERE o.Status = 'Delivered' 
+GROUP BY c.CustomerID 
+ORDER BY TotalSpent DESC 
+LIMIT 10;
+```
+
+**Find products never ordered** (Administrator)
+```sql
+-- Useful for identifying slow-moving inventory
+SELECT p.* 
+FROM Product p 
+LEFT JOIN OrderItem oi ON p.ProductID = oi.ProductID 
+WHERE oi.OrderID IS NULL;
+```
+
+**Calculate employee workload** (Management)
+```sql
+SELECT e.EmployeeID, 
+       e.FullName, 
+       COUNT(st.TicketID) AS OpenTickets 
+FROM Employee e 
+LEFT JOIN SupportTicket st ON e.EmployeeID = st.AssignedTo 
+    AND st.Status IN ('Open', 'In Progress') 
+GROUP BY e.EmployeeID 
+ORDER BY OpenTickets DESC;
+```
+
+**Analyse average order value by month** (Management)
+```sql
+SELECT DATE_FORMAT(OrderDate, '%Y-%m') AS Month, 
+       COUNT(OrderID) AS Orders, 
+       AVG(TotalAmount) AS AvgOrderValue, 
+       SUM(TotalAmount) AS TotalRevenue 
+FROM Order 
+WHERE Status = 'Delivered' 
+GROUP BY Month 
+ORDER BY Month DESC;
+```
+
+**Find substitute products in same category** (Customer)
+```sql
+SELECT p2.* 
+FROM Product p1 
+JOIN Product p2 ON p1.CategoryID = p2.CategoryID 
+WHERE p1.ProductID = ? 
+AND p2.ProductID != ? 
+AND p2.Status = 'Active' 
+AND p2.StockQty > 0 
+LIMIT 5;
+```
+
+**Hierarchical category display** (Customer)
+```sql
+-- Recursive CTE to display full category path
+-- Example: 'Electronics > Computers > Laptops > Gaming Laptops'
+WITH RECURSIVE CategoryPath AS (
+    SELECT CategoryID, 
+           Name, 
+           ParentCategoryID, 
+           Name AS FullPath
+    FROM Category
+    WHERE ParentCategoryID IS NULL
+    
+    UNION ALL
+    
+    SELECT c.CategoryID, 
+           c.Name, 
+           c.ParentCategoryID, 
+           CONCAT(cp.FullPath, ' > ', c.Name) AS FullPath
+    FROM Category c
+    INNER JOIN CategoryPath cp ON c.ParentCategoryID = cp.CategoryID
+)
+SELECT * FROM CategoryPath 
+WHERE CategoryID = ?;
+```
+
+**Assign tickets to employees with skills** (System)
+```sql
+-- Find best employee for ticket based on skills and current workload
+SELECT e.EmployeeID 
+FROM Employee e 
+JOIN EmployeeSkill es ON e.EmployeeID = es.EmployeeID 
+WHERE es.SkillID IN (
+    SELECT SkillID 
+    FROM Skill 
+    WHERE Name = 'Technical Support'
+) 
+AND e.Role = 'Support Agent' 
+ORDER BY (
+    SELECT COUNT(*) 
+    FROM SupportTicket 
+    WHERE AssignedTo = e.EmployeeID 
+    AND Status != 'Closed'
+) ASC 
+LIMIT 1;
+```
+
+**Stock replenishment report** (Administrator)
+```sql
+-- Identify products needing restocking based on low stock and recent sales
+SELECT p.ProductID, 
+       p.SKU, 
+       p.Name, 
+       p.StockQty, 
+       COALESCE(SUM(oi.Quantity), 0) AS RecentSales 
+FROM Product p 
+LEFT JOIN OrderItem oi ON p.ProductID = oi.ProductID 
+LEFT JOIN Order o ON oi.OrderID = o.OrderID 
+    AND o.OrderDate >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) 
+WHERE p.StockQty < 10 
+GROUP BY p.ProductID 
+ORDER BY RecentSales DESC;
+```
+
+#### 2.5.5 Update and Maintenance Operations
+
+The database must support regular updates and data maintenance:
+
+**Update customer profile** (Customer)
+```sql
+UPDATE Customer 
+SET Phone = ?, 
+    Street = ?, 
+    City = ?, 
+    Postcode = ?, 
+    Country = ? 
+WHERE CustomerID = ?;
+```
+
+**Update order status** (System)
+```sql
+-- Triggered when order is dispatched
+UPDATE Order 
+SET Status = 'Shipped' 
+WHERE OrderID = ? 
+AND Status = 'Processing';
+```
+
+**Adjust product pricing** (Administrator)
+```sql
+-- Historical OrderItem records preserve original prices
+UPDATE Product 
+SET UnitPrice = ? 
+WHERE ProductID = ?;
+```
+
+**Reassign support ticket** (Support Agent)
+```sql
+UPDATE SupportTicket 
+SET AssignedTo = ?, 
+    Status = 'In Progress' 
+WHERE TicketID = ?;
+```
+
+**Update employee manager** (Administrator)
+```sql
+-- Maintains management hierarchy
+UPDATE Employee 
+SET ManagerID = ? 
+WHERE EmployeeID = ?;
+```
+
+**Restock product inventory** (Administrator)
+```sql
+UPDATE Product 
+SET StockQty = StockQty + ?, 
+    Status = 'Active' 
+WHERE ProductID = ?;
+```
+
+**Archive old orders** (System)
+```sql
+-- Maintains performance by archiving old delivered orders
+UPDATE Order 
+SET Status = 'Archived' 
+WHERE Status = 'Delivered' 
+AND OrderDate < DATE_SUB(CURDATE(), INTERVAL 2 YEAR);
+```
 
 ### 2.6 Assumptions, Constraints, and Dependencies
 
@@ -283,7 +773,7 @@ UML class diagrams provide a standardised notation that effectively represents e
 
 **Tool Selection: Visual Paradigm**
 
-Visual Paradigm was chosen as the modelling tool due to its comprehensive UML 2.x support, database-specific extensions for entity relationship modelling, and ability to generate SQL DDL statements directly from diagrams. The tool is widely used in academic contexts and provides clear, professional diagram outputs suitable for documentation.
+Visual Paradigm was chosen as the modelling tool based on course material.
 
 **Key Benefits for This Project:**
 
